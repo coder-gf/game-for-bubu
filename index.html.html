@@ -1,0 +1,85 @@
+			
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Otome Game Start</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Georgia', serif;
+      background: #000;
+    }
+
+    .start-screen {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .background {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .petal-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .petal {
+      position: absolute;
+      top: -60px;
+      width: 40px;
+      opacity: 0.8;
+      animation: fall 8s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+    }
+
+    .click-area {
+      position: absolute;
+      top: 82%;
+      left: 30%;
+      width: 40%;
+      height: 10%;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="start-screen">
+    <img src="background.jpeg" alt="Background" class="background">
+
+    <div class="petal-container">
+      <img src="petal.png" class="petal" style="left: 10%; animation-delay: 0s;">
+      <img src="petal.png" class="petal" style="left: 20%; animation-delay: 1s;">
+      <img src="petal.png" class="petal" style="left: 30%; animation-delay: 2s;">
+      <img src="petal.png" class="petal" style="left: 40%; animation-delay: 3s;">
+      <img src="petal.png" class="petal" style="left: 50%; animation-delay: 0.5s;">
+      <img src="petal.png" class="petal" style="left: 60%; animation-delay: 1.5s;">
+      <img src="petal.png" class="petal" style="left: 70%; animation-delay: 2.5s;">
+      <img src="petal.png" class="petal" style="left: 80%; animation-delay: 3.5s;">
+      <img src="petal.png" class="petal" style="left: 90%; animation-delay: 1s;">
+      <img src="petal.png" class="petal" style="left: 95%; animation-delay: 0.2s;">
+    </div>
+
+    <a href="next.html" class="click-area"></a>
+    <audio id="bg-music" src="music.mp3" loop autoplay></audio>
+  </div>
+</body>
+</html>
