@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Otome Game Start</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    body {
+      background: url('background.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Georgia', serif;
+    }
+
+    /* Falling petals animation */
+    .petal {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      pointer-events: none;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Tap to Start overlay */
+    .tap-to-start {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255,255,255,0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: #444;
+      z-index: 100;
+    }
+
+    /* Start screen */
+    .start-screen {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Clickable area over the drawn Start button */
+    .click-area {
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40%;
+      height: 10%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Falling Petals -->
+<img src="petal.png" class="petal" style="left: 10%; animation-duration: 8s;">
+<img src="petal.png" class="petal" style="left: 30%; animation-duration: 6s;">
+<img src="petal.png" class="petal" style="left: 50%; animation-duration: 7s;">
+<img src="petal.png" class="petal" style="left: 70%; animation-duration: 9s;">
+<img src="petal.png" class="petal" style="left: 90%; animation-duration: 5s;">
+
+<!-- Tap to Start Overlay -->
+<div class="tap-to-start" onclick="startGame()">
+  <p>Tap to Start</p>
+</div>
+
+<!-- Background Music -->
+<audio id="bg-music" src="music.mp3" loop></audio>
+
+<!-- Main Start Screen (Hidden initially) -->
+<div class="start-screen" style="display: none;">
+  <div class="click-area" onclick="location.href='next.html'"></div>
+</div>
+
+<script>
+  function startGame() {
+    const music = document.getElementById("bg-music");
+    music.play();
+
+    document.querySelector(".tap-to-start").style.display = "none";
+    document.querySelector(".start-screen").style.display = "block";
+  }
+</script>
+
+</body>
+</html>
