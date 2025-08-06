@@ -16,10 +16,10 @@
     .game-container {
       width: 100vw;
       height: 100vh;
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
     }
 
     .start-bg {
@@ -51,6 +51,7 @@
       background-repeat: no-repeat;
       animation: fall linear infinite;
       z-index: 2;
+      pointer-events: none;
     }
 
     @keyframes fall {
@@ -67,27 +68,27 @@
 </head>
 <body>
   <div class="game-container">
-    <!-- Fullscreen image using object-fit: contain -->
+    <!-- Start screen background image -->
     <img src="start.jpg" class="start-bg" alt="Start Screen">
 
-    <!-- Clickable area on top of drawn Start button -->
+    <!-- Clickable transparent button area (aligned over the drawn "start" button) -->
     <div class="click-area" onclick="startGame()"></div>
   </div>
 
-  <!-- Background music -->
+  <!-- Background music (autoplay after user interaction) -->
   <audio id="bg-music" src="music.mp3" loop></audio>
 
   <script>
     const music = document.getElementById("bg-music");
 
-    // Safari requires user interaction to play music
+    // Start music only after first user interaction (Safari fix)
     window.addEventListener("click", () => {
       if (music.paused) {
         music.play();
       }
     });
 
-    // Create falling petals
+    // Create falling cherry blossom petals
     function createPetals() {
       const container = document.querySelector('.game-container');
       for (let i = 0; i < 20; i++) {
@@ -102,10 +103,10 @@
 
     createPetals();
 
-    // Start game button action
+    // Clickable start button logic
     function startGame() {
-      alert("Game start! (This will be replaced with the next scene transition)");
-      // Example: window.location.href = 'scene1.html';
+      alert("Start game! (This will be replaced with the next scene)");
+      // Later: window.location.href = 'scene1.html';
     }
   </script>
 </body>
