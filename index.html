@@ -23,30 +23,29 @@
     }
 
     .start-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('start.jpg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      position: absolute;
+      object-fit: contain;
       z-index: 1;
     }
 
     .click-area {
       position: absolute;
-      left: 25%;
-      bottom: 10%;
-      width: 50%;
-      height: 12%;
+      left: 21%;
+      bottom: 7.5%;
+      width: 58%;
+      height: 9%;
       z-index: 3;
       cursor: pointer;
     }
 
     .petal {
       position: absolute;
-      width: 30px;
-      height: 30px;
+      width: 60px;
+      height: 60px;
       background-image: url('petal.png');
       background-size: contain;
       background-repeat: no-repeat;
@@ -68,20 +67,24 @@
 </head>
 <body>
   <div class="game-container">
-    <div class="start-bg"></div>
+    <!-- Fullscreen image using object-fit: contain -->
+    <img src="start.jpg" class="start-bg" alt="Start Screen">
 
-    <!-- Updated clickable area aligned to drawn start button -->
+    <!-- Clickable area on top of drawn Start button -->
     <div class="click-area" onclick="startGame()"></div>
   </div>
 
+  <!-- Background music -->
   <audio id="bg-music" src="music.mp3" loop></audio>
 
   <script>
     const music = document.getElementById("bg-music");
 
-    // Safari won't autoplay without interaction
+    // Safari requires user interaction to play music
     window.addEventListener("click", () => {
-      if (music.paused) music.play();
+      if (music.paused) {
+        music.play();
+      }
     });
 
     // Create falling petals
@@ -99,9 +102,10 @@
 
     createPetals();
 
+    // Start game button action
     function startGame() {
-      alert("Start game! (This will change to actual scene transition soon)");
-      // Later: window.location.href = 'scene1.html';
+      alert("Game start! (This will be replaced with the next scene transition)");
+      // Example: window.location.href = 'scene1.html';
     }
   </script>
 </body>
