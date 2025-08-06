@@ -1,105 +1,108 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Otome Game Start</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     html, body {
       margin: 0;
       padding: 0;
+      background-color: black;
       overflow: hidden;
     }
 
-    body {
-      background: url('background.jpeg') no-repeat center center fixed;
-      background-size: cover;
-      font-family: 'Georgia', serif;
+    .game-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
     }
 
-    /* Falling petals animation */
+    .start-bg {
+      width: 100%;
+      height: 100%;
+      background-image: url('start.jpg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .click-area {
+      position: absolute;
+      left: 25%;
+      bottom: 10%;
+      width: 50%;
+      height: 12%;
+      z-index: 3;
+      cursor: pointer;
+    }
+
     .petal {
-      position: fixed;
+      position: absolute;
       width: 30px;
       height: 30px;
-      pointer-events: none;
+      background-image: url('petal.png');
+      background-size: contain;
+      background-repeat: no-repeat;
       animation: fall linear infinite;
+      z-index: 2;
     }
 
     @keyframes fall {
       0% {
-        transform: translateY(-100px) rotate(0deg);
+        transform: translateY(-10vh) rotate(0deg);
         opacity: 1;
       }
       100% {
-        transform: translateY(100vh) rotate(360deg);
+        transform: translateY(110vh) rotate(360deg);
         opacity: 0;
       }
-    }
-
-    /* Tap to Start overlay */
-    .tap-to-start {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(255,255,255,0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      color: #444;
-      z-index: 100;
-    }
-
-    /* Start screen */
-    .start-screen {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    /* Clickable area over the drawn Start button */
-    .click-area {
-      position: absolute;
-      bottom: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40%;
-      height: 10%;
-      cursor: pointer;
     }
   </style>
 </head>
 <body>
+  <div class="game-container">
+    <div class="start-bg"></div>
 
-<!-- Falling Petals -->
-<img src="petal.png" class="petal" style="left: 10%; animation-duration: 8s;">
-<img src="petal.png" class="petal" style="left: 30%; animation-duration: 6s;">
-<img src="petal.png" class="petal" style="left: 50%; animation-duration: 7s;">
-<img src="petal.png" class="petal" style="left: 70%; animation-duration: 9s;">
-<img src="petal.png" class="petal" style="left: 90%; animation-duration: 5s;">
+    <!-- Updated clickable area aligned to drawn start button -->
+    <div class="click-area" onclick="startGame()"></div>
+  </div>
 
-<!-- Tap to Start Overlay -->
-<div class="tap-to-start" onclick="startGame()">
-  <p>Tap to Start</p>
-</div>
+  <audio id="bg-music" src="music.mp3" loop></audio>
 
-<!-- Background Music -->
-<audio id="bg-music" src="music.mp3" loop></audio>
-
-<!-- Main Start Screen (Hidden initially) -->
-<div class="start-screen" style="display: none;">
-  <div class="click-area" onclick="location.href='next.html'"></div>
-</div>
-
-<script>
-  function startGame() {
+  <script>
     const music = document.getElementById("bg-music");
-    music.play();
 
-    document.querySelector(".tap-to-start").style.display = "none";
-    document.querySelector(".start-screen").style.display = "block";
-  }
-</script>
+    // Safari won't autoplay without interaction
+    window.addEventListener("click", () => {
+      if (music.paused) music.play();
+    });
 
+    // Create falling petals
+    function createPetals() {
+      const container = document.querySelector('.game-container');
+      for (let i = 0; i < 20; i++) {
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = 5 + Math.random() * 5 + "s";
+        petal.style.animationDelay = Math.random() * 5 + "s";
+        container.appendChild(petal);
+      }
+    }
+
+    createPetals();
+
+    function startGame() {
+      alert("Start game! (This will change to actual scene transition soon)");
+      // Later: window.location.href = 'scene1.html';
+    }
+  </script>
 </body>
 </html>
