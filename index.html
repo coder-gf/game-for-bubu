@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Otome Game Start</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      overflow: hidden;
+    }
+
+    .game-container {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .start-bg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .click-area {
+      position: absolute;
+      left: 21%;
+      bottom: 7.5%;
+      width: 58%;
+      height: 9%;
+      z-index: 3;
+      cursor: pointer;
+    }
+
+    .petal {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-image: url('petal.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: fall linear infinite;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <img src="start.jpg" class="start-bg" alt="Start screen">
+    <div class="click-area" onclick="startGame()"></div>
+  </div>
+
+  <!-- Background music -->
+  <audio id="bg-music" src="music.mp3" loop></audio>
+
+  <script>
+    const music = document.getElementById("bg-music");
+
+    // Safari requires click to start audio
+    window.addEventListener("click", () => {
+      if (music.paused) {
+        music.play();
+      }
+    });
+
+    function createPetals() {
+      const container = document.querySelector('.game-container');
+      for (let i = 0; i < 20; i++) {
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = 5 + Math.random() * 5 + "s";
+        petal.style.animationDelay = Math.random() * 5 + "s";
+        container.appendChild(petal);
+      }
+    }
+
+    createPetals();
+
+    function startGame() {
+      alert("Game starts! (Replace this with your actual game scene.)");
+      // Example for next scene later: window.location.href = "scene1.html";
+    }
+  </script>
+</body>
+</html>
