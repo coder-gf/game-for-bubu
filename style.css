@@ -70,8 +70,8 @@ html, body {
 .petal{
   position: absolute;
   top: -10%;
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   background-size: contain;
   background-repeat: no-repeat;
   opacity: .9;
