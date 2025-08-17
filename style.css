@@ -1,3 +1,11 @@
+/* Game container takes full screen */
+#game-container {
+  position: relative;
+  width: 100vw;     /* full browser width */
+  height: 100vh;    /* full browser height */
+  overflow: hidden;
+  background-color: black;
+}
 /* Root + typography */
 :root{
   --ochre: #c99700;           /* bright yellow ochre */
