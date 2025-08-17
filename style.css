@@ -72,6 +72,8 @@ html, body {
   top: -10%;
   width: 100px;
   height: 100px;
+  background-size: contain;
+  background-repeat: no-repeat;
   opacity: .9;
   animation-name: fall, sway, spin;
   animation-timing-function: linear, ease-in-out, ease-in-out;
