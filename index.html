@@ -1,228 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Otome Game</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: black;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Otome Game</title>
+<style>
+  :root{
+    /* TUNE THESE FOUR NUMBERS TO MATCH YOUR DRAWN START BUTTON */
+    --start-left: 18%;   /* distance from left edge of the artwork */
+    --start-bottom: 8%;  /* distance from bottom edge of the artwork */
+    --start-width: 60%;  /* width of the clickable area */
+    --start-height: 13%; /* height of the clickable area */
+  }
 
-    /* General scene container */
-    #game {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
+  html,body{
+    margin:0; height:100%; background:#000; overflow:hidden;
+    font-family: system-ui, -apple-system, Arial, sans-serif;
+  }
 
-    .scene {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
+  /* Stage = whole screen */
+  #stage{
+    position:relative; width:100vw; height:100vh; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
 
-    .scene.active {
-      opacity: 1;
-      z-index: 1;
-    }
+  /* Artboard keeps your 3:4 ratio so nothing is cropped.
+     We resize it by JS to be as large as possible while fully visible. */
+  #artboard{
+    position:relative; overflow:hidden; /* crops petals to the image */
+    background:#000;                   /* bars around image if needed */
+    touch-action: manipulation;
+  }
 
-    /* Start screen */
-    #startScreen {
-      background-image: url('start.jpg');
-      opacity: 1;
-      z-index: 2;
-    }
+  .bg{
+    position:absolute; inset:0;
+    width:100%; height:100%; object-fit:contain; /* no cropping */
+    user-select:none; -webkit-user-drag:none;
+  }
 
-    /* Custom Start Button (your drawn one) */
-    #startButton {
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
-      z-index: 3;
-    }
-    #startButton img {
-      width: 200px; /* Adjust to your button’s size */
-      height: auto;
-    }
+  /* ---------- START SCREEN ---------- */
+  #startLayer{ position:absolute; inset:0; }
+  #startHotspot{
+    position:absolute; z-index:3; cursor:pointer; border:none; background:transparent;
+    left:var(--start-left); width:var(--start-width);
+    bottom:var(--start-bottom); height:var(--start-height);
+  }
 
-    /* Subtitle text */
-    #subtitle {
-      position: absolute;
-      bottom: 50px;
-      width: 100%;
-      text-align: center;
-      font-size: 22px;
-      color: #FFD75F; /* brighter ochre yellow */
-      text-shadow: 2px 2px 6px black;
-      padding: 0 40px;
-    }
+  /* Petals live only inside the start layer */
+  #petalLayer{ position:absolute; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
+  .petal{
+    position:absolute; top:-60px; width:48px; height:48px;
+    background:url('petal.png') center/contain no-repeat;
+    animation: fall var(--dur) linear var(--delay) forwards;
+    opacity:.95;
+  }
+  @keyframes fall{
+    from{ transform:translateY(0) rotate(0deg); opacity:.95; }
+    to  { transform:translateY(calc(100% + 120px)) rotate(360deg); opacity:.7; }
+  }
 
-    /* Petal animation (only on start screen) */
-    .petal {
-      position: absolute;
-      top: -50px;
-      width: 30px;
-      height: 30px;
-      background-image: url('petal.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      pointer-events: none;
-      animation: fall linear infinite;
-    }
-    @keyframes fall {
-      from {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0.7;
-      }
-    }
-  </style>
+  /* ---------- EPILOGUE ---------- */
+  #sceneImg{ opacity:0; transition:opacity .6s ease; }
+  #sceneImg.show{ opacity:1; }
+
+  #subtitle{
+    position:absolute; left:0; right:0; bottom:24px;
+    padding:0 28px; text-align:center; min-height:2.6em;
+    color:#FFD75F; text-shadow:2px 2px 8px #000, 0 0 2px #000;
+    font-size: clamp(18px, 2.7vw, 26px); line-height:1.35;
+    z-index:5; pointer-events:none;
+  }
+</style>
 </head>
 <body>
-  <div id="game">
-    <!-- Start screen -->
-    <div id="startScreen" class="scene active">
-      <div id="startButton">
-        <img src="start_button.png" alt="Start">
-      </div>
+
+<div id="stage">
+  <!-- 3:4 artwork area (size computed in JS so the whole image is visible) -->
+  <div id="artboard" aria-label="Game screen">
+    <!-- Shared image element: first shows start.jpg, then scene images -->
+    <img id="sceneImg" class="bg" alt="scene">
+
+    <!-- Start screen overlay (petals + transparent button) -->
+    <div id="startLayer" hidden>
+      <div id="petalLayer" aria-hidden="true"></div>
+      <!-- Transparent clickable area over your drawn button -->
+      <button id="startHotspot" aria-label="Start"></button>
     </div>
 
-    <!-- Epilogue scenes -->
-    <div id="epilogue">
-      <div id="e1" class="scene" style="background-image: url('e1.jpg');"></div>
-      <div id="e2" class="scene" style="background-image: url('e2.jpg');"></div>
-      <div id="e3" class="scene" style="background-image: url('e3.jpg');"></div>
-      <div id="e4" class="scene" style="background-image: url('e4.jpg');"></div>
-      <div id="e5" class="scene" style="background-image: url('e5.jpg');"></div>
-      <div id="subtitle"></div>
-    </div>
+    <!-- Subtitle line (typed) -->
+    <div id="subtitle"></div>
   </div>
+</div>
 
-  <!-- Music -->
-  <audio id="startMusic" src="music.mp3" loop autoplay></audio>
-  <audio id="epilogueMusic" src="epilogue.mp3" loop></audio>
+<!-- Audio -->
+<audio id="startMusic" src="music.mp3" loop></audio>
+<audio id="epilogueMusic" src="epilogue.mp3" loop></audio>
 
-  <script>
-    const startScreen = document.getElementById('startScreen');
-    const startButton = document.getElementById('startButton');
-    const startMusic = document.getElementById('startMusic');
-    const epilogueMusic = document.getElementById('epilogueMusic');
-    const subtitle = document.getElementById('subtitle');
+<script>
+/* ========== SIZING: keep 3:4 art fully visible, no cropping ========== */
+const stage = document.getElementById('stage');
+const artboard = document.getElementById('artboard');
+function fitArtboard(){
+  const vw = stage.clientWidth, vh = stage.clientHeight;
+  const targetRatio = 3/4;  // width / height
+  let w = vw, h = Math.round(vw / targetRatio);
+  if(h > vh){               // too tall → fit by height instead
+    h = vh; w = Math.round(vh * targetRatio);
+  }
+  artboard.style.width = w + 'px';
+  artboard.style.height = h + 'px';
+}
+window.addEventListener('resize', fitArtboard);
+fitArtboard();
 
-    const scenes = [
-      { id: "e1", lines: [
-        "Damn. I haven't checked my phone all day. It was a long day at the library.",
-        "Hmm.. Syringe? This app has been so dry lately.",
-        "I should just delete it at this point. I don't think I want to hear another corny voice note.",
-        "*swipe* *swipe* *swipe*"
-      ]},
-      { id: "e2", lines: [
-        "Oooooh look at this. Seems interesting.",
-        "She likes metal huh? Looks like my talents are gonna come in handy again.",
-        "I don't expect anything though. I'm tired of even sending comments, but let me do this last one for today.",
-        "“I play metal.\" Sent."
-      ]},
-      { id: "e3", lines: [
-        "Oh my god. I think I studied too much today.",
-        "It does get stressful sometimes.",
-        "Mmmmm… I feel kinda sleepy now...",
-        "zzzzz"
-      ]},
-      { id: "e4", lines: [
-        "*phone beeps* \"You matched with Kriti.\"",
-        "Mmmmm.. Oh god, did I fall asleep?",
-        "What time is it…? Let me just get into bed."
-      ]},
-      { id: "e5", lines: [
-        "Okay let's see. Looks like I matched with this girl.",
-        "Ummm… let me drop her a text.",
-        "*a few hours into the conversation*",
-        "She seems cool... wouldn't hurt to meet up I guess."
-      ]}
-    ];
+/* ========== DATA: 5 scenes with lines ========== */
+const SCENES = [
+  { img:'e1.jpg', lines:[
+    "Damn. I haven't checked my phone all day. It was a long day at the library.",
+    "Hmm.. Syringe? This app has been so dry lately.",
+    "I should just delete it at this point. I don't think I want to hear another corny voice note.",
+    "*swipe* *swipe* *swipe*"
+  ]},
+  { img:'e2.jpg', lines:[
+    "Oooooh look at this. Seems interesting.",
+    "She likes metal huh? Looks like my talents are gonna come in handy again.",
+    "I don't expect anything though. I'm tired of even sending comments, but let me do this last one for today.",
+    "“I play metal.\" Sent."
+  ]},
+  { img:'e3.jpg', lines:[
+    "Oh my god. I think I studied too much today.",
+    "It does get stressful sometimes.",
+    "Mmmmm… I feel kinda sleepy now...",
+    "zzzzz"
+  ]},
+  { img:'e4.jpg', lines:[
+    "*phone beeps* \"You matched with Kriti.\"",
+    "Mmmmm.. Oh god, did I fall asleep?",
+    "What time is it…? Let me just get into bed."
+  ]},
+  { img:'e5.jpg', lines:[
+    "Okay let's see. Looks like I matched with this girl.",
+    "Ummm… let me drop her a text.",
+    "*a few hours into the conversation*",
+    "She seems cool... wouldn't hurt to meet up I guess."
+  ]}
+];
 
-    let currentScene = 0;
-    let currentLine = 0;
-    let typing = false;
+/* ========== ELEMENTS ========== */
+const sceneImg = document.getElementById('sceneImg');
+const startLayer = document.getElementById('startLayer');
+const petalLayer = document.getElementById('petalLayer');
+const startHotspot = document.getElementById('startHotspot');
+const subtitle = document.getElementById('subtitle');
+const startMusic = document.getElementById('startMusic');
+const epilogueMusic = document.getElementById('epilogueMusic');
 
-    // Petal effect (only on start screen)
-    function createPetal() {
-      if (!startScreen.classList.contains('active')) return; // only during start screen
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
-      petal.style.left = Math.random() * window.innerWidth + 'px';
-      petal.style.animationDuration = (5 + Math.random() * 5) + 's';
-      document.body.appendChild(petal);
-      setTimeout(() => petal.remove(), 10000);
+/* ========== START SCREEN (with petals) ========== */
+let petalTimer;
+function spawnPetal(){
+  // Only while start layer is visible
+  if(startLayer.hidden) return;
+  const p = document.createElement('div');
+  p.className = 'petal';
+  // Random x inside the artboard/petalLayer width
+  const W = petalLayer.clientWidth;
+  p.style.left = Math.floor(Math.random()* (W-48)) + 'px';
+  // Random duration & delay
+  p.style.setProperty('--dur', (5 + Math.random()*5) + 's');
+  p.style.setProperty('--delay', (Math.random()*1.5) + 's');
+  petalLayer.appendChild(p);
+  // Clean up after animation
+  setTimeout(()=> p.remove(), 12000);
+}
+
+function startPetals(){
+  clearInterval(petalTimer);
+  // burst + steady stream
+  for(let i=0;i<12;i++) spawnPetal();
+  petalTimer = setInterval(spawnPetal, 350);
+}
+function stopPetals(){
+  clearInterval(petalTimer);
+  [...petalLayer.children].forEach(n=>n.remove());
+}
+
+/* ========== TYPING EFFECT ========== */
+let typing=false;
+function typeText(text, speed=40){
+  subtitle.textContent = '';
+  typing = true;
+  let i=0;
+  const tick = () => {
+    subtitle.textContent += text[i++];
+    if(i < text.length){ setTimeout(tick, speed); }
+    else { typing = false; }
+  };
+  tick();
+}
+
+/* ========== FLOW CONTROL ========== */
+let sceneIndex = 0, lineIndex = 0;
+
+function showScene(idx){
+  sceneIndex = idx; lineIndex = 0;
+  sceneImg.classList.remove('show');
+  // change image
+  sceneImg.src = SCENES[idx].img;
+  // ensure fade-in once image renders
+  sceneImg.onload = () => { sceneImg.classList.add('show'); };
+  // first line
+  typeText(SCENES[idx].lines[lineIndex++]);
+}
+
+function nextStep(){
+  if(typing) return;
+  const scene = SCENES[sceneIndex];
+  if(lineIndex < scene.lines.length){
+    // Next line, same image
+    typeText(scene.lines[lineIndex++]);
+  }else{
+    // Next scene
+    const next = sceneIndex + 1;
+    if(next < SCENES.length){
+      showScene(next);
+    }else{
+      subtitle.textContent = "The End";
     }
-    setInterval(createPetal, 300);
+  }
+}
 
-    // Typing effect
-    function typeLine(line, callback) {
-      typing = true;
-      subtitle.textContent = '';
-      let i = 0;
-      const interval = setInterval(() => {
-        subtitle.textContent += line[i];
-        i++;
-        if (i >= line.length) {
-          clearInterval(interval);
-          typing = false;
-          if (callback) callback();
-        }
-      }, 40);
-    }
+/* ========== AUDIO (Safari-safe) ========== */
+// Try to start start music on the FIRST user gesture anywhere on start screen
+function tryPlayStart(){
+  if(startLayer.hidden) return;
+  if(startMusic.paused){
+    startMusic.volume = 0.9;
+    startMusic.play().catch(()=>{/* Safari blocks until a gesture; this was one */});
+  }
+}
+document.addEventListener('pointerdown', tryPlayStart, { once:false });
 
-    function showNext() {
-      if (typing) return;
-      const scene = scenes[currentScene];
-      if (currentLine < scene.lines.length) {
-        typeLine(scene.lines[currentLine], () => {});
-        currentLine++;
-      } else {
-        document.getElementById(scene.id).classList.remove('active');
-        currentScene++;
-        currentLine = 0;
-        if (currentScene < scenes.length) {
-          const nextScene = scenes[currentScene];
-          document.getElementById(nextScene.id).classList.add('active');
-          typeLine(nextScene.lines[currentLine], () => {});
-          currentLine++;
-        }
-      }
-    }
+/* ========== INIT ========== */
+// Put start.jpg, show start layer, begin petals
+function init(){
+  sceneImg.src = 'start.jpg';
+  sceneImg.classList.add('show');
+  startLayer.hidden = false;
+  startPetals();
+}
+init();
 
-    // Start button click
-    startButton.addEventListener('click', () => {
-      startScreen.classList.remove('active');
-      startMusic.pause();
-      epilogueMusic.play();
+/* Clicking the transparent area over the drawn button starts the epilogue */
+startHotspot.addEventListener('click', () => {
+  // Stop start stuff
+  stopPetals();
+  startLayer.hidden = true;
+  startMusic.pause();
 
-      // Start epilogue
-      const firstScene = scenes[0];
-      document.getElementById(firstScene.id).classList.add('active');
-      typeLine(firstScene.lines[0], () => {});
-      currentLine = 1;
+  // Start epilogue music
+  epilogueMusic.volume = 0.9;
+  epilogueMusic.play().catch(()=>{ /* plays after next click if Safari blocks */ });
 
-      document.getElementById('epilogue').addEventListener('click', showNext);
-    });
-  </script>
+  // Show first epilogue scene
+  showScene(0);
+});
+
+/* Click anywhere inside the artboard (except when typing) to advance */
+artboard.addEventListener('click', (e) => {
+  if(!startLayer.hidden) return; // ignore clicks while on start screen (start is via hotspot)
+  nextStep();
+});
+
+/* Helpful: update hotspot position when resized (artboard already resizes).
+   You only need to tweak the 4 CSS variables at the top to align it perfectly. */
+</script>
 </body>
 </html>
