@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Otome Visual Novel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Otome Game</title>
   <style>
     body, html {
       margin: 0;
@@ -10,195 +11,195 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-    }
-
-    #gameContainer {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background: black;
-    }
-
-    #background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* fills screen fully, crops edges if needed */
       background-color: black;
     }
 
-    #subtitleBox {
+    #game-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .scene {
       position: absolute;
-      bottom: 10%;
+      width: 100%;
+      height: 100%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: none;
+    }
+
+    #start-screen {
+      display: block;
+      background: url('start.jpg') no-repeat center center;
+      background-size: contain;
+    }
+
+    #start-button {
+      position: absolute;
+      left: 50%;
+      top: 78%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 70px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .subtitle {
+      position: absolute;
+      bottom: 40px;
       width: 100%;
       text-align: center;
-      font-size: 2vw;
-      color: #FFD84D; /* brighter ochre yellow */
+      font-size: 24px;
+      color: #FFD633; /* brighter ochre yellow */
+      font-family: 'Georgia', serif;
       text-shadow: 2px 2px 4px black;
     }
 
-    #startOverlay {
+    canvas {
       position: absolute;
-      bottom: 12%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;   /* adjust to match your drawn button */
-      height: 60px;   /* adjust to match your drawn button */
-      cursor: pointer;
-      background: transparent;
-      border: none;
-    }
-
-    /* Petal animation */
-    .petal {
-      position: absolute;
-      top: -50px;
-      width: 25px;
-      height: 25px;
-      background-image: url('petal.png'); /* replace with your petal image */
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); }
-      100% { transform: translateY(110vh) rotate(360deg); }
+      top: 0;
+      left: 0;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <div id="gameContainer">
-    <img id="background" src="start.jpg">
-    <div id="subtitleBox"></div>
-    <button id="startOverlay"></button>
-    <audio id="bgm" src="music.mp3" loop></audio>
+  <div id="game-container">
+    <!-- Start screen -->
+    <div id="start-screen" class="scene">
+      <button id="start-button"></button>
+      <canvas id="petals-canvas"></canvas>
+    </div>
+
+    <!-- 5 story scenes -->
+    <div id="scene1" class="scene" style="background-image: url('scene1.jpg');"></div>
+    <div id="scene2" class="scene" style="background-image: url('scene2.jpg');"></div>
+    <div id="scene3" class="scene" style="background-image: url('scene3.jpg');"></div>
+    <div id="scene4" class="scene" style="background-image: url('scene4.jpg');"></div>
+    <div id="scene5" class="scene" style="background-image: url('scene5.jpg');"></div>
+
+    <!-- Subtitles -->
+    <div id="subtitle" class="subtitle"></div>
   </div>
 
-  <script>
-    const background = document.getElementById("background");
-    const subtitleBox = document.getElementById("subtitleBox");
-    const startOverlay = document.getElementById("startOverlay");
-    const bgm = document.getElementById("bgm");
+  <audio id="start-music" src="music.mp3" loop></audio>
+  <audio id="epilogue-music" src="epilogue.mp3" loop></audio>
 
-    // Scenes
+  <script>
+    const startButton = document.getElementById("start-button");
+    const startScreen = document.getElementById("start-screen");
+    const subtitle = document.getElementById("subtitle");
     const scenes = [
-      {
-        img: "e1.jpg",
-        lines: [
-          "Damn. I haven't checked my phone all day. It was a long day at the library.",
-          "Hmm.. Syringe? This app has been so dry lately.",
-          "I should just delete it at this point. I don't think I want to hear another corny voice note.",
-          "*swipe* *swipe* *swipe*"
-        ]
-      },
-      {
-        img: "e2.jpg",
-        lines: [
-          "Oooooh look at this. Seems interesting.",
-          "She likes metal huh? Looks like my talents are gonna come in handy again.",
-          "I don't expect anything though. I'm tired of even sending comments, but let me do this last one for today.",
-          "“I play metal.\" Sent."
-        ]
-      },
-      {
-        img: "e3.jpg",
-        lines: [
-          "Oh my god. I think I studied too much today.",
-          "It does get stressful sometimes.",
-          "Mmmmm… I feel kinda sleepy now...",
-          "zzzzz"
-        ]
-      },
-      {
-        img: "e4.jpg",
-        lines: [
-          "*phone beeps* \"You matched with Kriti.\"",
-          "Mmmmm.. Oh god, did I fall asleep?",
-          "What time is it…? Let me just get into bed."
-        ]
-      },
-      {
-        img: "e5.jpg",
-        lines: [
-          "Okay let's see. Looks like I matched with this girl.",
-          "Ummm… let me drop her a text.",
-          "*a few hours into the conversation*",
-          "She seems cool... wouldn't hurt to meet up I guess."
-        ]
-      }
+      { id: "scene1", text: "It was a quiet evening, when their story began." },
+      { id: "scene2", text: "The city lights reflected their unspoken feelings." },
+      { id: "scene3", text: "Each moment together felt timeless and fragile." },
+      { id: "scene4", text: "He reached out, and she understood without words." },
+      { id: "scene5", text: "And so, under the stars, their journey truly started." }
     ];
 
     let currentScene = 0;
-    let currentLine = 0;
-    let typing = false;
 
-    // Petal spawning only for start screen
-    function createPetals() {
-      const petal = document.createElement("div");
-      petal.classList.add("petal");
-      petal.style.left = Math.random() * window.innerWidth + "px";
-      petal.style.animationDuration = 5 + Math.random() * 5 + "s";
-      document.getElementById("gameContainer").appendChild(petal);
+    const startMusic = document.getElementById("start-music");
+    const epilogueMusic = document.getElementById("epilogue-music");
 
-      setTimeout(() => petal.remove(), 10000);
+    // Play music.mp3 on load
+    window.onload = () => {
+      startMusic.play().catch(err => console.log("Autoplay blocked:", err));
+    };
+
+    startButton.addEventListener("click", () => {
+      // Stop start music, start epilogue
+      startMusic.pause();
+      startMusic.currentTime = 0;
+      epilogueMusic.play();
+
+      startScreen.style.display = "none";
+      showScene(currentScene);
+    });
+
+    function showScene(index) {
+      if (index >= scenes.length) return;
+
+      const scene = document.getElementById(scenes[index].id);
+      scene.style.display = "block";
+      typeSubtitle(scenes[index].text, () => {
+        setTimeout(() => {
+          scene.style.display = "none";
+          currentScene++;
+          showScene(currentScene);
+        }, 3000);
+      });
     }
 
-    let petalInterval = setInterval(createPetals, 500);
-
-    // Typing effect for subtitles
-    function typeLine(line, callback) {
-      typing = true;
-      subtitleBox.innerHTML = "";
+    function typeSubtitle(text, callback) {
+      subtitle.innerHTML = "";
       let i = 0;
-      const interval = setInterval(() => {
-        subtitleBox.innerHTML += line.charAt(i);
-        i++;
-        if (i >= line.length) {
-          clearInterval(interval);
-          typing = false;
-          if (callback) callback();
+      function typing() {
+        if (i < text.length) {
+          subtitle.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(typing, 50);
+        } else if (callback) {
+          callback();
         }
-      }, 50);
+      }
+      typing();
     }
 
-    // Show next line or scene
-    function next() {
-      if (typing) return;
-      if (currentLine < scenes[currentScene].lines.length) {
-        typeLine(scenes[currentScene].lines[currentLine], () => {
-          currentLine++;
-        });
-      } else {
-        currentScene++;
-        currentLine = 0;
-        if (currentScene < scenes.length) {
-          background.src = scenes[currentScene].img;
-          next();
-        } else {
-          subtitleBox.innerHTML = "The End";
+    // Petals only on start screen
+    const canvas = document.getElementById("petals-canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let petals = [];
+    const petalImage = new Image();
+    petalImage.src = "petal.png";
+
+    class Petal {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * -canvas.height;
+        this.size = 20 + Math.random() * 15;
+        this.speed = 1 + Math.random() * 2;
+        this.drift = Math.random() * 2 - 1;
+      }
+      update() {
+        this.y += this.speed;
+        this.x += this.drift;
+        if (this.y > canvas.height) {
+          this.y = -this.size;
+          this.x = Math.random() * canvas.width;
         }
+      }
+      draw() {
+        ctx.drawImage(petalImage, this.x, this.y, this.size, this.size);
       }
     }
 
-    // Start game
-    startOverlay.addEventListener("click", () => {
-      clearInterval(petalInterval); // stop petals
-      document.querySelectorAll(".petal").forEach(p => p.remove()); // clear existing petals
-      background.src = scenes[0].img;
-      startOverlay.style.display = "none";
-      bgm.play();
-      next();
-    });
-
-    // Advance on click
-    document.getElementById("gameContainer").addEventListener("click", () => {
-      if (startOverlay.style.display === "none") {
-        next();
+    function createPetals() {
+      for (let i = 0; i < 20; i++) {
+        petals.push(new Petal());
       }
-    });
+    }
+
+    function animatePetals() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      petals.forEach(petal => {
+        petal.update();
+        petal.draw();
+      });
+      requestAnimationFrame(animatePetals);
+    }
+
+    petalImage.onload = () => {
+      createPetals();
+      animatePetals();
+    };
   </script>
 </body>
 </html>
