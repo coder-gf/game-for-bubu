@@ -1,107 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Otome Game Start</title>
   <style>
-    html, body {
+    body, html {
       margin: 0;
       padding: 0;
-      background-color: black;
+      height: 100%;
+      width: 100%;
       overflow: hidden;
     }
 
-    .game-container {
-      width: 100vw;
-      height: 100vh;
+    #game-container {
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
     .start-bg {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
       position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* ensures no cropping */
+      z-index: 0;
+    }
+
+    #start-button {
+      position: absolute;
+      bottom: 20%; /* adjust to match drawn button */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 70px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    #petals-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
       z-index: 1;
     }
 
-    .click-area {
+    #game-screen {
+      display: none;
       position: absolute;
-      left: 21%;
-      bottom: 7.5%;
-      width: 58%;
-      height: 9%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
       z-index: 3;
-      cursor: pointer;
-    }
-
-    .petal {
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      background-image: url('petal.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: fall linear infinite;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(-10vh) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-      }
+      padding: 20px;
+      box-sizing: border-box;
     }
   </style>
 </head>
 <body>
-  <div class="game-container">
+  <div id="game-container">
     <img src="start.jpg" class="start-bg" alt="Start screen">
-    <div class="click-area" onclick="startGame()"></div>
+    <canvas id="petals-canvas"></canvas>
+    <button id="start-button"></button>
+    <div id="game-screen">
+      <h1>Chapter 1</h1>
+      <p>The story begins...</p>
+    </div>
   </div>
 
-  <!-- Background music -->
   <audio id="bg-music" src="music.mp3" loop></audio>
 
   <script>
-    const music = document.getElementById("bg-music");
+    const canvas = document.getElementById("petals-canvas");
+    const ctx = canvas.getContext("2d");
+    let petals = [];
+    const petalImage = new Image();
+    petalImage.src = "petal.png";
 
-    // Safari requires click to start audio
-    window.addEventListener("click", () => {
-      if (music.paused) {
-        music.play();
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    class Petal {
+      constructor() {
+        this.reset();
       }
-    });
+
+      reset() {
+        this.x = Math.random() * canvas.width;  // random across screen
+        this.y = -20; // start ABOVE the screen
+        this.size = 25 + Math.random() * 25; // larger petals
+        this.speed = 1 + Math.random() * 2;
+        this.angle = Math.random() * Math.PI * 2;
+        this.swing = Math.random() * 50;
+      }
+
+      update() {
+        this.y += this.speed;
+        this.x += Math.sin(this.angle) * 0.5;
+        this.angle += 0.01;
+
+        if (this.y > canvas.height) {
+          this.reset(); // restart at top
+        }
+      }
+
+      draw() {
+        ctx.drawImage(petalImage, this.x, this.y, this.size, this.size);
+      }
+    }
 
     function createPetals() {
-      const container = document.querySelector('.game-container');
-      for (let i = 0; i < 20; i++) {
-        const petal = document.createElement("div");
-        petal.className = "petal";
-        petal.style.left = Math.random() * 100 + "vw";
-        petal.style.animationDuration = 5 + Math.random() * 5 + "s";
-        petal.style.animationDelay = Math.random() * 5 + "s";
-        container.appendChild(petal);
+      petals = [];
+      for (let i = 0; i < 30; i++) {
+        petals.push(new Petal());
       }
     }
 
-    createPetals();
-
-    function startGame() {
-      alert("Game starts! (Replace this with your actual game scene.)");
-      // Example for next scene later: window.location.href = "scene1.html";
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let petal of petals) {
+        petal.update();
+        petal.draw();
+      }
+      requestAnimationFrame(animate);
     }
+
+    petalImage.onload = () => {
+      createPetals();
+      animate();
+    };
+
+    // Start button functionality
+    const startButton = document.getElementById("start-button");
+    const gameScreen = document.getElementById("game-screen");
+    const bgMusic = document.getElementById("bg-music");
+
+    startButton.addEventListener("click", () => {
+      document.querySelector(".start-bg").style.display = "none";
+      startButton.style.display = "none";
+      document.getElementById("petals-canvas").style.display = "none";
+      gameScreen.style.display = "block";
+      bgMusic.play();
+    });
   </script>
 </body>
 </html>
