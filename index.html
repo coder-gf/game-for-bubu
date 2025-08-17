@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Otome Game Start</title>
+  <title>Otome Game</title>
   <style>
     body, html {
       margin: 0;
@@ -11,151 +10,225 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
+      background: black;
+      font-family: Arial, sans-serif;
     }
 
-    #game-container {
-      position: relative;
-      width: 100%;
+    /* Background images */
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
       height: 100%;
-      overflow: hidden;
+      width: 100%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
     }
 
-    .start-bg {
+    /* Start Screen */
+    #start-screen {
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
       height: 100%;
-      object-fit: contain; /* ensures no cropping */
-      z-index: 0;
-    }
-
-    #start-button {
-      position: absolute;
-      bottom: 20%; /* adjust to match drawn button */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 180px;
-      height: 70px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
+      width: 100%;
+      background: url('start-bg.jpg') center center / cover no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
       z-index: 2;
     }
 
-    #petals-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
+    #start-button {
+      padding: 15px 40px;
+      font-size: 24px;
+      background-color: #CC9A06;
+      border: none;
+      color: black;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: transform 0.2s;
     }
 
-    #game-screen {
-      display: none;
+    #start-button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Subtitle Text */
+    #subtitle {
       position: absolute;
-      top: 0;
-      left: 0;
+      bottom: 60px;
       width: 100%;
-      height: 100%;
-      background: white;
-      z-index: 3;
-      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      color: #CC9A06;
+      text-shadow: 2px 2px 6px black;
+      padding: 0 20px;
       box-sizing: border-box;
+      min-height: 50px;
+    }
+
+    /* Petals */
+    .petal {
+      position: absolute;
+      top: -10px;
+      background: url('petal.png') no-repeat center center / contain;
+      width: 25px;
+      height: 25px;
+      opacity: 0.8;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+      }
     }
   </style>
 </head>
 <body>
-  <div id="game-container">
-    <img src="start.jpg" class="start-bg" alt="Start screen">
-    <canvas id="petals-canvas"></canvas>
-    <button id="start-button"></button>
-    <div id="game-screen">
-      <h1>Chapter 1</h1>
-      <p>The story begins...</p>
-    </div>
+
+  <!-- Background -->
+  <div id="background"></div>
+
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <button id="start-button">Start</button>
   </div>
 
-  <audio id="bg-music" src="music.mp3" loop></audio>
+  <!-- Subtitle -->
+  <div id="subtitle"></div>
+
+  <!-- Music -->
+  <audio id="start-music" src="start.mp3" loop></audio>
+  <audio id="epilogue-music" src="epilogue.mp3" loop></audio>
 
   <script>
-    const canvas = document.getElementById("petals-canvas");
-    const ctx = canvas.getContext("2d");
-    let petals = [];
-    const petalImage = new Image();
-    petalImage.src = "petal.png";
+    const startScreen = document.getElementById("start-screen");
+    const startButton = document.getElementById("start-button");
+    const background = document.getElementById("background");
+    const subtitle = document.getElementById("subtitle");
+    const startMusic = document.getElementById("start-music");
+    const epilogueMusic = document.getElementById("epilogue-music");
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    // Scenes
+    const scenes = [
+      {
+        image: "e1.jpg",
+        text: [
+          "Damn. I haven't checked my phone all day. It was a long day at the library.",
+          "Hmm.. Syringe? This app has been so dry lately.",
+          "I should just delete it at this point. I don't think I want to hear another corny voice note.",
+          "*swipe* *swipe* *swipe*"
+        ]
+      },
+      {
+        image: "e2.jpg",
+        text: [
+          "Oooooh look at this. Seems interesting.",
+          "She likes metal huh? Looks like my talents are gonna come in handy again.",
+          "I don't expect anything though. I'm tired of even sending comments, but let me do this last one for today.",
+          "“I play metal.\" Sent."
+        ]
+      },
+      {
+        image: "e3.jpg",
+        text: [
+          "Oh my god. I think I studied too much today.",
+          "It does get stressful sometimes.",
+          "Mmmmm… I feel kinda sleepy now...",
+          "zzzzz"
+        ]
+      },
+      {
+        image: "e4.jpg",
+        text: [
+          "*phone beeps* \"You matched with Kriti.\"",
+          "Mmmmm.. Oh god, did I fall asleep?",
+          "What time is it…? Let me just get into bed."
+        ]
+      },
+      {
+        image: "e5.jpg",
+        text: [
+          "Okay let's see. Looks like I matched with this girl.",
+          "Ummm… let me drop her a text.",
+          "*a few hours into the conversation*",
+          "She seems cool... wouldn't hurt to meet up I guess."
+        ]
+      }
+    ];
+
+    let currentScene = 0;
+    let currentLine = 0;
+    let isTyping = false;
+
+    // Petal animation
+    function createPetal() {
+      const petal = document.createElement("div");
+      petal.classList.add("petal");
+      petal.style.left = Math.random() * window.innerWidth + "px";
+      petal.style.animationDuration = (5 + Math.random() * 5) + "s";
+      document.body.appendChild(petal);
+
+      setTimeout(() => {
+        petal.remove();
+      }, 10000);
     }
 
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
+    let petalInterval = setInterval(createPetal, 400);
 
-    class Petal {
-      constructor() {
-        this.reset();
-      }
+    // Start Button
+    startButton.addEventListener("click", () => {
+      startScreen.style.display = "none";
+      clearInterval(petalInterval); // stop petals once game starts
+      startMusic.pause();
+      epilogueMusic.play();
+      showScene();
+    });
 
-      reset() {
-        this.x = Math.random() * canvas.width;  // random across screen
-        this.y = -20; // start ABOVE the screen
-        this.size = 25 + Math.random() * 25; // larger petals
-        this.speed = 1 + Math.random() * 2;
-        this.angle = Math.random() * Math.PI * 2;
-        this.swing = Math.random() * 50;
-      }
+    function showScene() {
+      currentLine = 0;
+      background.style.backgroundImage = `url(${scenes[currentScene].image})`;
+      background.style.opacity = 1;
+      showLine();
+    }
 
-      update() {
-        this.y += this.speed;
-        this.x += Math.sin(this.angle) * 0.5;
-        this.angle += 0.01;
+    function showLine() {
+      isTyping = true;
+      subtitle.textContent = "";
+      const line = scenes[currentScene].text[currentLine];
+      let i = 0;
+      const typing = setInterval(() => {
+        subtitle.textContent += line[i];
+        i++;
+        if (i >= line.length) {
+          clearInterval(typing);
+          isTyping = false;
+        }
+      }, 40); // typing speed
+    }
 
-        if (this.y > canvas.height) {
-          this.reset(); // restart at top
+    document.body.addEventListener("click", () => {
+      if (startScreen.style.display !== "none") return; // disable clicks on start screen
+      if (isTyping) return; // ignore clicks while typing
+
+      currentLine++;
+      if (currentLine < scenes[currentScene].text.length) {
+        showLine();
+      } else {
+        currentScene++;
+        if (currentScene < scenes.length) {
+          showScene();
+        } else {
+          subtitle.textContent = "The End";
         }
       }
-
-      draw() {
-        ctx.drawImage(petalImage, this.x, this.y, this.size, this.size);
-      }
-    }
-
-    function createPetals() {
-      petals = [];
-      for (let i = 0; i < 30; i++) {
-        petals.push(new Petal());
-      }
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let petal of petals) {
-        petal.update();
-        petal.draw();
-      }
-      requestAnimationFrame(animate);
-    }
-
-    petalImage.onload = () => {
-      createPetals();
-      animate();
-    };
-
-    // Start button functionality
-    const startButton = document.getElementById("start-button");
-    const gameScreen = document.getElementById("game-screen");
-    const bgMusic = document.getElementById("bg-music");
-
-    startButton.addEventListener("click", () => {
-      document.querySelector(".start-bg").style.display = "none";
-      startButton.style.display = "none";
-      document.getElementById("petals-canvas").style.display = "none";
-      gameScreen.style.display = "block";
-      bgMusic.play();
     });
   </script>
 </body>
