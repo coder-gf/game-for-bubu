@@ -2,25 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Otome Game</title>
   <style>
     body, html {
       margin: 0;
       padding: 0;
-      height: 100%;
       width: 100%;
+      height: 100%;
       overflow: hidden;
-      background: black;
+      background-color: black;
       font-family: Arial, sans-serif;
     }
 
-    /* Background images */
-    #background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
+    /* General scene container */
+    #game {
+      position: relative;
       width: 100%;
+      height: 100%;
+    }
+
+    .scene {
+      position: absolute;
+      width: 100%;
+      height: 100%;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -28,207 +33,195 @@
       transition: opacity 1s ease-in-out;
     }
 
-    /* Start Screen */
-    #start-screen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background: url('start.jpg') center center / cover no-repeat;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+    .scene.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    /* Start screen */
+    #startScreen {
+      background-image: url('start.jpg');
+      opacity: 1;
       z-index: 2;
     }
 
-    #start-button {
-      padding: 15px 40px;
-      font-size: 24px;
-      background-color: #CC9A06;
-      border: none;
-      color: black;
+    /* Custom Start Button (your drawn one) */
+    #startButton {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
       cursor: pointer;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: transform 0.2s;
+      z-index: 3;
+    }
+    #startButton img {
+      width: 200px; /* Adjust to your button’s size */
+      height: auto;
     }
 
-    #start-button:hover {
-      transform: scale(1.05);
-    }
-
-    /* Subtitle Text */
+    /* Subtitle text */
     #subtitle {
       position: absolute;
-      bottom: 60px;
+      bottom: 50px;
       width: 100%;
       text-align: center;
-      font-size: 24px;
-      color: #CC9A06;
+      font-size: 22px;
+      color: #FFD75F; /* brighter ochre yellow */
       text-shadow: 2px 2px 6px black;
-      padding: 0 20px;
-      box-sizing: border-box;
-      min-height: 50px;
+      padding: 0 40px;
     }
 
-    /* Petals */
+    /* Petal animation (only on start screen) */
     .petal {
       position: absolute;
-      top: -10px;
-      background: url('petal.png') no-repeat center center / contain;
-      width: 25px;
-      height: 25px;
-      opacity: 0.8;
-      animation: fall linear forwards;
+      top: -50px;
+      width: 30px;
+      height: 30px;
+      background-image: url('petal.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
+      animation: fall linear infinite;
     }
-
     @keyframes fall {
+      from {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
       to {
         transform: translateY(110vh) rotate(360deg);
+        opacity: 0.7;
       }
     }
   </style>
 </head>
 <body>
+  <div id="game">
+    <!-- Start screen -->
+    <div id="startScreen" class="scene active">
+      <div id="startButton">
+        <img src="start_button.png" alt="Start">
+      </div>
+    </div>
 
-  <!-- Background -->
-  <div id="background"></div>
-
-  <!-- Start Screen -->
-  <div id="start-screen">
-    <button id="start-button">Start</button>
+    <!-- Epilogue scenes -->
+    <div id="epilogue">
+      <div id="e1" class="scene" style="background-image: url('e1.jpg');"></div>
+      <div id="e2" class="scene" style="background-image: url('e2.jpg');"></div>
+      <div id="e3" class="scene" style="background-image: url('e3.jpg');"></div>
+      <div id="e4" class="scene" style="background-image: url('e4.jpg');"></div>
+      <div id="e5" class="scene" style="background-image: url('e5.jpg');"></div>
+      <div id="subtitle"></div>
+    </div>
   </div>
 
-  <!-- Subtitle -->
-  <div id="subtitle"></div>
-
   <!-- Music -->
-  <audio id="start-music" src="music.mp3" loop></audio>
-  <audio id="epilogue-music" src="epilogue.mp3" loop></audio>
+  <audio id="startMusic" src="music.mp3" loop autoplay></audio>
+  <audio id="epilogueMusic" src="epilogue.mp3" loop></audio>
 
   <script>
-    const startScreen = document.getElementById("start-screen");
-    const startButton = document.getElementById("start-button");
-    const background = document.getElementById("background");
-    const subtitle = document.getElementById("subtitle");
-    const startMusic = document.getElementById("start-music");
-    const epilogueMusic = document.getElementById("epilogue-music");
+    const startScreen = document.getElementById('startScreen');
+    const startButton = document.getElementById('startButton');
+    const startMusic = document.getElementById('startMusic');
+    const epilogueMusic = document.getElementById('epilogueMusic');
+    const subtitle = document.getElementById('subtitle');
 
-    // Scenes
     const scenes = [
-      {
-        image: "e1.jpg",
-        text: [
-          "Damn. I haven't checked my phone all day. It was a long day at the library.",
-          "Hmm.. Syringe? This app has been so dry lately.",
-          "I should just delete it at this point. I don't think I want to hear another corny voice note.",
-          "*swipe* *swipe* *swipe*"
-        ]
-      },
-      {
-        image: "e2.jpg",
-        text: [
-          "Oooooh look at this. Seems interesting.",
-          "She likes metal huh? Looks like my talents are gonna come in handy again.",
-          "I don't expect anything though. I'm tired of even sending comments, but let me do this last one for today.",
-          "“I play metal.\" Sent."
-        ]
-      },
-      {
-        image: "e3.jpg",
-        text: [
-          "Oh my god. I think I studied too much today.",
-          "It does get stressful sometimes.",
-          "Mmmmm… I feel kinda sleepy now...",
-          "zzzzz"
-        ]
-      },
-      {
-        image: "e4.jpg",
-        text: [
-          "*phone beeps* \"You matched with Kriti.\"",
-          "Mmmmm.. Oh god, did I fall asleep?",
-          "What time is it…? Let me just get into bed."
-        ]
-      },
-      {
-        image: "e5.jpg",
-        text: [
-          "Okay let's see. Looks like I matched with this girl.",
-          "Ummm… let me drop her a text.",
-          "*a few hours into the conversation*",
-          "She seems cool... wouldn't hurt to meet up I guess."
-        ]
-      }
+      { id: "e1", lines: [
+        "Damn. I haven't checked my phone all day. It was a long day at the library.",
+        "Hmm.. Syringe? This app has been so dry lately.",
+        "I should just delete it at this point. I don't think I want to hear another corny voice note.",
+        "*swipe* *swipe* *swipe*"
+      ]},
+      { id: "e2", lines: [
+        "Oooooh look at this. Seems interesting.",
+        "She likes metal huh? Looks like my talents are gonna come in handy again.",
+        "I don't expect anything though. I'm tired of even sending comments, but let me do this last one for today.",
+        "“I play metal.\" Sent."
+      ]},
+      { id: "e3", lines: [
+        "Oh my god. I think I studied too much today.",
+        "It does get stressful sometimes.",
+        "Mmmmm… I feel kinda sleepy now...",
+        "zzzzz"
+      ]},
+      { id: "e4", lines: [
+        "*phone beeps* \"You matched with Kriti.\"",
+        "Mmmmm.. Oh god, did I fall asleep?",
+        "What time is it…? Let me just get into bed."
+      ]},
+      { id: "e5", lines: [
+        "Okay let's see. Looks like I matched with this girl.",
+        "Ummm… let me drop her a text.",
+        "*a few hours into the conversation*",
+        "She seems cool... wouldn't hurt to meet up I guess."
+      ]}
     ];
 
     let currentScene = 0;
     let currentLine = 0;
-    let isTyping = false;
+    let typing = false;
 
-    // Petal animation
+    // Petal effect (only on start screen)
     function createPetal() {
-      const petal = document.createElement("div");
-      petal.classList.add("petal");
-      petal.style.left = Math.random() * window.innerWidth + "px";
-      petal.style.animationDuration = (5 + Math.random() * 5) + "s";
+      if (!startScreen.classList.contains('active')) return; // only during start screen
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.style.left = Math.random() * window.innerWidth + 'px';
+      petal.style.animationDuration = (5 + Math.random() * 5) + 's';
       document.body.appendChild(petal);
-
-      setTimeout(() => {
-        petal.remove();
-      }, 10000);
+      setTimeout(() => petal.remove(), 10000);
     }
+    setInterval(createPetal, 300);
 
-    let petalInterval = setInterval(createPetal, 400);
-
-    // Start Button
-    startButton.addEventListener("click", () => {
-      startScreen.style.display = "none";
-      clearInterval(petalInterval); // stop petals once game starts
-      startMusic.pause();
-      epilogueMusic.play();
-      showScene();
-    });
-
-    function showScene() {
-      currentLine = 0;
-      background.style.backgroundImage = `url(${scenes[currentScene].image})`;
-      background.style.opacity = 1;
-      showLine();
-    }
-
-    function showLine() {
-      isTyping = true;
-      subtitle.textContent = "";
-      const line = scenes[currentScene].text[currentLine];
+    // Typing effect
+    function typeLine(line, callback) {
+      typing = true;
+      subtitle.textContent = '';
       let i = 0;
-      const typing = setInterval(() => {
+      const interval = setInterval(() => {
         subtitle.textContent += line[i];
         i++;
         if (i >= line.length) {
-          clearInterval(typing);
-          isTyping = false;
+          clearInterval(interval);
+          typing = false;
+          if (callback) callback();
         }
-      }, 40); // typing speed
+      }, 40);
     }
 
-    document.body.addEventListener("click", () => {
-      if (startScreen.style.display !== "none") return; // disable clicks on start screen
-      if (isTyping) return; // ignore clicks while typing
-
-      currentLine++;
-      if (currentLine < scenes[currentScene].text.length) {
-        showLine();
+    function showNext() {
+      if (typing) return;
+      const scene = scenes[currentScene];
+      if (currentLine < scene.lines.length) {
+        typeLine(scene.lines[currentLine], () => {});
+        currentLine++;
       } else {
+        document.getElementById(scene.id).classList.remove('active');
         currentScene++;
+        currentLine = 0;
         if (currentScene < scenes.length) {
-          showScene();
-        } else {
-          subtitle.textContent = "The End";
+          const nextScene = scenes[currentScene];
+          document.getElementById(nextScene.id).classList.add('active');
+          typeLine(nextScene.lines[currentLine], () => {});
+          currentLine++;
         }
       }
+    }
+
+    // Start button click
+    startButton.addEventListener('click', () => {
+      startScreen.classList.remove('active');
+      startMusic.pause();
+      epilogueMusic.play();
+
+      // Start epilogue
+      const firstScene = scenes[0];
+      document.getElementById(firstScene.id).classList.add('active');
+      typeLine(firstScene.lines[0], () => {});
+      currentLine = 1;
+
+      document.getElementById('epilogue').addEventListener('click', showNext);
     });
   </script>
 </body>
