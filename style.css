@@ -97,7 +97,7 @@ html, body {
   inset-inline: 6%;
   bottom: 3.5%;
   text-align: center;
-  color: var(--ochre);
+  color: #ffcc00;
   font-size: var(--subtitle-size);
   line-height: 1.35;
   text-shadow: var(--subtitle-shadow);
