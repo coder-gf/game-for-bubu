@@ -1,0 +1,101 @@
+/* Root + typography */
+:root{
+  --ochre: #c99700;           /* bright yellow ochre */
+  --subtitle-size: clamp(16px, 2.4vmin, 22px);
+  --subtitle-shadow: 0 2px 4px rgba(0,0,0,.65), 0 0 10px rgba(0,0,0,.5);
+  --fade-ms: 550ms;
+}
+
+/* Full-viewport stage holder with a fixed game area of 3:4 that always shows full images */
+html, body {
+  margin: 0; padding: 0; height: 100%; background:#000;
+  font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+}
+
+.stage {
+  position: fixed; inset: 0;
+  display: grid; place-items: center;
+  opacity: 0; pointer-events: none; transition: opacity var(--fade-ms) ease;
+}
+
+.stage.visible { opacity: 1; pointer-events: auto; }
+
+.bg {
+  /* Game area that preserves 3:4 and shows the entire image without cutting anything */
+  width: min(100vw, 75vh);      /* 3:4 ratio sizing */
+  aspect-ratio: 3 / 4;
+  object-fit: contain;          /* full image must be visible */
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Start button (invisible overlay) positioned over the grey oval on start.jpg
+   These percentages are tuned for the shared image (1536×1152). Adjust if you ever change that art. */
+#start-button{
+  position: absolute;
+  /* bottom-left corner area where the grey oval sits */
+  left: 6.5%;
+  bottom: 7%;
+  width: 32%;
+  height: 12%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  /* For accessibility focus outline without showing a box visually */
+  outline: none;
+}
+#start-button:focus-visible{
+  box-shadow: 0 0 0 3px rgba(255,255,255,.6) inset, 0 0 0 3px rgba(255,255,255,.6);
+  border-radius: 999px;
+}
+
+/* Petals container */
+#petals-layer{
+  position: absolute; inset: 0;
+  overflow: hidden; pointer-events: none;
+}
+
+/* Each petal sprite */
+.petal{
+  position: absolute;
+  top: -10%;
+  width: clamp(14px, 2.2vmin, 28px);
+  height: auto;
+  opacity: .9;
+  animation-name: fall, sway, spin;
+  animation-timing-function: linear, ease-in-out, ease-in-out;
+  animation-iteration-count: 1, infinite, infinite;
+}
+@keyframes fall{
+  from{ transform: translateY(-10vh); opacity:.0; }
+  to  { transform: translateY(110vh); opacity: 1; }
+}
+@keyframes sway{
+  0%  { transform: translateX(0) translateY(var(--y)); }
+  50% { transform: translateX(12vw) translateY(var(--y)); }
+  100%{ transform: translateX(-8vw) translateY(var(--y)); }
+}
+@keyframes spin{
+  0%  { rotate: 0deg; }
+  100%{ rotate: 360deg; }
+}
+
+/* Subtitle styling (bottom overlay, no box) */
+#subtitle{
+  position: absolute;
+  inset-inline: 6%;
+  bottom: 3.5%;
+  text-align: center;
+  color: var(--ochre);
+  font-size: var(--subtitle-size);
+  line-height: 1.35;
+  text-shadow: var(--subtitle-shadow);
+  pointer-events: none; /* clicks go to scene */
+  min-height: 3em;      /* reserve space so layout doesn't jump */
+}
+
+/* Image fades on scene change */
+.fade{
+  opacity: 0; transition: opacity var(--fade-ms) ease;
+}
+.fade.show{ opacity: 1; }
