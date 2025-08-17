@@ -20,13 +20,16 @@ html, body {
 
 .stage.visible { opacity: 1; pointer-events: auto; }
 
+/* Make the image fill the entire browser viewport while keeping the whole image visible (no cropping) */
 .bg {
-  /* Game area that preserves 3:4 and shows the entire image without cutting anything */
-  width: min(100vw, 75vh);      /* 3:4 ratio sizing */
-  aspect-ratio: 3 / 4;
-  object-fit: contain;          /* full image must be visible */
+  width: 100vw;                /* make the image element span the full viewport width */
+  height: 100vh;               /* and the full viewport height */
+  object-fit: contain;         /* scale the image so it fits inside the element WITHOUT cropping */
+  object-position: center center; /* keep the image centered */
   user-select: none;
   -webkit-user-drag: none;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* Start button (invisible overlay) positioned over the grey oval on start.jpg
