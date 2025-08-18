@@ -176,7 +176,6 @@ function onEpilogueClick(){
   } else {
   // After e5 is done, go to custom Scene E6
   document.removeEventListener('pointerdown', onEpilogueClick);
-  playSceneE6();
 }
 }
 
