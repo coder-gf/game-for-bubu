@@ -1,5 +1,3 @@
-
-
 /* ---------- Audio helpers ---------- */
 const startMusic = document.getElementById('start-music');
 const epilogueMusic = document.getElementById('epilogue-music');
@@ -102,28 +100,24 @@ const scenes = [
       "*a few hours into the conversation*",
       "She seems cool... wouldn't hurt to meet up I guess."
     ]
-  }
+  },
   {
     img: 'e6.jpg',
-    lines: [
-    ]
-  }
-{
+    lines: []
+  },
+  {
     img: 'e7.jpg',
-    lines: [
-    ]
-  }
-{
+    lines: []
+  },
+  {
     img: 'e8.jpg',
-    lines: [
-    ]
-  }
-{
+    lines: []
+  },
+  {
     img: 'e9.jpg',
-    lines: [
-    ]
-  }
-{
+    lines: []
+  },
+  {
     img: 'e10.jpg',
     lines: [
       "It's almost morning again, I guess we talked all night.",
@@ -175,7 +169,7 @@ function showScene(idx){
   }));
 }
 
-/* Advance click handler while in epilogue */
+/* Advance click handler while in epilogue - FIXED VERSION */
 function onEpilogueClick(){
   const s = scenes[sceneIndex];
 
@@ -192,21 +186,26 @@ function onEpilogueClick(){
     return;
   }
 
-  // Finished all lines in this scene -> next scene or end
+  // Finished all lines in this scene -> next scene
   sceneIndex++;
   if (sceneIndex < scenes.length){
-    // Fade to next image then start first line
+    // Fade to next image
     lineIndex = 0;
     showScene(sceneIndex);
-    // Wait for the fade to settle a bit before typing
-    setTimeout(() => startTyping(scenes[sceneIndex].lines[0]), 220);
+    
+    // Only start typing if there are lines in the scene
+    setTimeout(() => {
+      if (scenes[sceneIndex].lines.length > 0) {
+        startTyping(scenes[sceneIndex].lines[0]);
+      }
+    }, 220);
   } else {
-  // After e5 is done, go to custom Scene E6
-  document.removeEventListener('pointerdown', onEpilogueClick);
-}
+    // Game completed
+    document.removeEventListener('pointerdown', onEpilogueClick);
+  }
 }
 
-/* Start epilogue flow */
+/* Start epilogue flow - FIXED VERSION */
 function beginEpilogue(){
   // Stop start music, start epilogue music
   startMusic.pause();
@@ -223,7 +222,13 @@ function beginEpilogue(){
   // Prepare scene 0
   sceneIndex = 0; lineIndex = 0;
   showScene(sceneIndex);
-  setTimeout(() => startTyping(scenes[0].lines[0]), 220);
+  
+  // Only start typing if there are lines - FIXED
+  setTimeout(() => {
+    if (scenes[0].lines.length > 0) {
+      startTyping(scenes[0].lines[0]);
+    }
+  }, 220);
 
   // Click anywhere to advance
   document.addEventListener('pointerdown', onEpilogueClick);
@@ -235,6 +240,11 @@ window.addEventListener('load', () => {
   tryPlay(startMusic);
   // Petals animation
   startPetals();
+  
+  // Preload all scene images for smoother transitions
+  scenes.forEach(scene => {
+    new Image().src = scene.img;
+  });
 });
 
 /* Start button -> enter epilogue */
