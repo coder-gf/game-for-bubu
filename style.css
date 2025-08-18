@@ -120,39 +120,3 @@ html, body {
 }
 .fade.show{ opacity: 1; }
 
-/* Scene E6 message boxes */
-#scene-e6 {
-  display: none; /* hidden until script shows it */
-  position: fixed;
-  inset: 0;
-}
-
-#scene-e6 .bg {
-  width: 100vw;
-  height: 100vh;
-  object-fit: contain;
-  object-position: center;
-}
-
-.message-box {
-  position: absolute;
-  background: #9aff9a;   /* light green bubble */
-  color: black;          /* text color */
-  font-size: clamp(16px, 2.2vmin, 20px);
-  line-height: 1.4;
-  padding: 12px 16px;
-  border-radius: 12px;
-  max-width: 70%;
-  word-wrap: break-word;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-/* Position msg1 and msg2 where your attached E6 image shows them */
-#msg1 {
-  top: 25%;   /* adjust these to match your image */
-  left: 12%;
-}
-#msg2 {
-  top: 45%;   /* adjust as needed */
-  left: 12%;
-}
