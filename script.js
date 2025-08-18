@@ -102,7 +102,10 @@ const scenes = [
     ]
   }
 ];
-
+// when e5 finishes and user clicks again
+function endE5() {
+  playSceneE6();
+}
 /* Typing engine */
 const TYPE_MS = 45;  // speed per character (feel free to tweak)
 let sceneIndex = 0;
