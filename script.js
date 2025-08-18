@@ -103,6 +103,33 @@ const scenes = [
       "She seems cool... wouldn't hurt to meet up I guess."
     ]
   }
+  {
+    img: 'e6.jpg',
+    lines: [
+    ]
+  }
+{
+    img: 'e7.jpg',
+    lines: [
+    ]
+  }
+{
+    img: 'e8.jpg',
+    lines: [
+    ]
+  }
+{
+    img: 'e9.jpg',
+    lines: [
+    ]
+  }
+{
+    img: 'e10.jpg',
+    lines: [
+      "It's almost morning again, I guess we talked all night.",
+      "I'm still not sleepy though...",
+    ]
+  }
 ];
 
 /* Typing engine */
