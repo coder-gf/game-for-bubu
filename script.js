@@ -55,7 +55,7 @@ const epilogueStage = document.getElementById('epilogue');
 const sceneImage = document.getElementById('scene-image');
 const subtitle = document.getElementById('subtitle');
 
-/* Scenes and lines (exactly as provided) */
+/* Scenes and lines (e1–e5) */
 const scenes = [
   {
     img: 'e1.jpg',
@@ -104,12 +104,12 @@ const scenes = [
 ];
 
 /* Typing engine */
-const TYPE_MS = 45;  // speed per character (feel free to tweak)
+const TYPE_MS = 45;
 let sceneIndex = 0;
 let lineIndex  = 0;
 let typingTimer = null;
-let typingFullLine = ''; // target text
-let typingShown = '';    // currently rendered part
+let typingFullLine = '';
+let typingShown = '';
 let isTyping = false;
 
 function typeNextChar(){
@@ -132,91 +132,66 @@ function startTyping(line){
 function endTyping(){
   clearInterval(typingTimer);
   isTyping = false;
-  subtitle.textContent = typingFullLine; // ensure full line shown
+  subtitle.textContent = typingFullLine;
 }
 
 /* Load a scene image with fade */
 function showScene(idx){
   const s = scenes[idx];
-  sceneImage.classList.remove('show');  // start transparent
+  sceneImage.classList.remove('show');
   sceneImage.src = s.img;
-  // small delay so the 'show' class transition applies after src swap
   requestAnimationFrame(() => requestAnimationFrame(() => {
     sceneImage.classList.add('show');
   }));
 }
 
-/* Advance click handler while in epilogue */
+/* ---------- Advance click handler ---------- */
 function onEpilogueClick(){
   const s = scenes[sceneIndex];
 
   if (isTyping){
-    // If mid-typing, complete the current line instantly
     endTyping();
     return;
   }
 
-  // If line finished, move to next
   lineIndex++;
   if (lineIndex < s.lines.length){
     startTyping(s.lines[lineIndex]);
     return;
   }
 
-  // Finished all lines in this scene -> next scene or end
+  // finished lines -> next scene
   sceneIndex++;
   if (sceneIndex < scenes.length){
-    // Fade to next image then start first line
     lineIndex = 0;
     showScene(sceneIndex);
-    // Wait for the fade to settle a bit before typing
     setTimeout(() => startTyping(scenes[sceneIndex].lines[0]), 220);
   } else {
-  // After e5 is done, go to custom Scene E6
-  document.removeEventListener('pointerdown', onEpilogueClick);
-  playSceneE6();
-}
-}
-
-/* Start epilogue flow */
-function beginEpilogue(){
-  // Stop start music, start epilogue music
-  startMusic.pause();
-  epilogueMusic.currentTime = 0;
-  tryPlay(epilogueMusic);
-
-  // Hide start screen, show epilogue stage
-  startScreen.classList.remove('visible');
-  epilogueStage.classList.add('visible');
-
-  // Remove petals
-  stopPetals();
-
-  // Prepare scene 0
-  sceneIndex = 0; lineIndex = 0;
-  showScene(sceneIndex);
-  setTimeout(() => startTyping(scenes[0].lines[0]), 220);
-
-  // Click anywhere to advance
-  document.addEventListener('pointerdown', onEpilogueClick);
+    // after e5 -> jump to E6
+    document.removeEventListener('pointerdown', onEpilogueClick);
+    playSceneE6();
+  }
 }
 
 /* ---------- Scene E6 custom logic ---------- */
 let e6Step = 0;
 
 function playSceneE6(){
-  // Hide epilogue stage (with subtitle + sceneImage)
-  epilogueStage.classList.remove('visible');
-  // Show custom scene-e6
-  document.getElementById("scene-e6").style.display = "block";
+  // Show e6 background
+  sceneImage.classList.remove('show');
+  sceneImage.src = 'e6.jpg';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    sceneImage.classList.add('show');
+  }));
 
-  // Reset boxes
-  document.getElementById("msg1").textContent = "";
-  document.getElementById("msg2").textContent = "";
+  // Hide subtitle, reset chat
+  subtitle.textContent = '';
+  document.getElementById("msg1").textContent = '';
+  document.getElementById("msg2").textContent = '';
   e6Step = 0;
 
-  // Attach click handler
-  document.getElementById("scene-e6").onclick = function(){
+  // Attach click handler to epilogue stage
+  epilogueStage.onclick = function(){
     if (e6Step === 0){
       typeWriterE6("hey so I was thinking", "msg1", 50);
       e6Step++;
@@ -224,8 +199,8 @@ function playSceneE6(){
       typeWriterE6("It would be really fun if we could meet up tomorrow.", "msg2", 50);
       e6Step++;
     } else if (e6Step === 2){
-      // Done with E6 — TODO: go to E7 if needed
       console.log("End of E6.");
+      // TODO: proceed to E7 if needed
     }
   };
 }
@@ -245,11 +220,26 @@ function typeWriterE6(text, elementId, speed){
 
 /* ---------- Boot ---------- */
 window.addEventListener('load', () => {
-  // Try to start start-screen music
   tryPlay(startMusic);
-  // Petals animation
   startPetals();
 });
 
 /* Start button -> enter epilogue */
 startBtn.addEventListener('click', beginEpilogue);
+
+function beginEpilogue(){
+  startMusic.pause();
+  epilogueMusic.currentTime = 0;
+  tryPlay(epilogueMusic);
+
+  startScreen.classList.remove('visible');
+  epilogueStage.classList.add('visible');
+
+  stopPetals();
+
+  sceneIndex = 0; lineIndex = 0;
+  showScene(sceneIndex);
+  setTimeout(() => startTyping(scenes[0].lines[0]), 220);
+
+  document.addEventListener('pointerdown', onEpilogueClick);
+}
