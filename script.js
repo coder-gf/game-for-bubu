@@ -210,3 +210,34 @@ window.addEventListener('load', () => {
 
 /* Start button -> enter epilogue */
 startBtn.addEventListener('click', beginEpilogue);
+
+let e6Step = 0; // tracks progress in scene E6
+
+function playSceneE6() {
+  // hide E5, show E6
+  document.getElementById("scene-e5").style.display = "none";
+  document.getElementById("scene-e6").style.display = "block";
+
+  // clear old text
+  document.getElementById("msg1").innerHTML = "";
+  document.getElementById("msg2").innerHTML = "";
+
+  // reset step counter
+  e6Step = 0;
+
+  // add click listener for progression
+  document.getElementById("scene-e6").onclick = function() {
+    if (e6Step === 0) {
+      // show first text box
+      typeWriter("hey so I was thinking", "msg1", 50);
+      e6Step++;
+    } else if (e6Step === 1) {
+      // show second text box
+      typeWriter("It would be really fun if we could meet up tomorrow.", "msg2", 50);
+      e6Step++;
+    } else if (e6Step === 2) {
+      // 👉 here you can move to the next scene later
+      // playSceneE7();
+    }
+  };
+}
