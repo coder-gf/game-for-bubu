@@ -172,9 +172,10 @@ function onEpilogueClick(){
     // Wait for the fade to settle a bit before typing
     setTimeout(() => startTyping(scenes[sceneIndex].lines[0]), 220);
   } else {
-    // End: stay on e5.jpg (do nothing further)
-    document.removeEventListener('pointerdown', onEpilogueClick);
-  }
+  // After e5 is done, go to custom Scene E6
+  document.removeEventListener('pointerdown', onEpilogueClick);
+  playSceneE6();
+}
 }
 
 /* Start epilogue flow */
@@ -198,6 +199,48 @@ function beginEpilogue(){
 
   // Click anywhere to advance
   document.addEventListener('pointerdown', onEpilogueClick);
+}
+
+/* ---------- Scene E6 custom logic ---------- */
+let e6Step = 0;
+
+function playSceneE6(){
+  // Hide epilogue stage (with subtitle + sceneImage)
+  epilogueStage.classList.remove('visible');
+  // Show custom scene-e6
+  document.getElementById("scene-e6").style.display = "block";
+
+  // Reset boxes
+  document.getElementById("msg1").textContent = "";
+  document.getElementById("msg2").textContent = "";
+  e6Step = 0;
+
+  // Attach click handler
+  document.getElementById("scene-e6").onclick = function(){
+    if (e6Step === 0){
+      typeWriterE6("hey so I was thinking", "msg1", 50);
+      e6Step++;
+    } else if (e6Step === 1){
+      typeWriterE6("It would be really fun if we could meet up tomorrow.", "msg2", 50);
+      e6Step++;
+    } else if (e6Step === 2){
+      // Done with E6 — TODO: go to E7 if needed
+      console.log("End of E6.");
+    }
+  };
+}
+
+function typeWriterE6(text, elementId, speed){
+  let i = 0;
+  const el = document.getElementById(elementId);
+  el.textContent = "";
+  const interval = setInterval(() => {
+    el.textContent += text.charAt(i);
+    i++;
+    if (i >= text.length){
+      clearInterval(interval);
+    }
+  }, speed);
 }
 
 /* ---------- Boot ---------- */
