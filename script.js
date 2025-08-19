@@ -163,13 +163,17 @@ function showScene(idx){
   const s = scenes[idx];
   sceneImage.classList.remove('show');  // start transparent
   sceneImage.src = s.img;
+  
+  // Clear subtitle when changing scenes - FIX ADDED HERE
+  subtitle.textContent = '';
+  
   // small delay so the 'show' class transition applies after src swap
   requestAnimationFrame(() => requestAnimationFrame(() => {
     sceneImage.classList.add('show');
   }));
 }
 
-/* Advance click handler while in epilogue - FIXED VERSION */
+/* Advance click handler while in epilogue */
 function onEpilogueClick(){
   const s = scenes[sceneIndex];
 
@@ -205,7 +209,7 @@ function onEpilogueClick(){
   }
 }
 
-/* Start epilogue flow - FIXED VERSION */
+/* Start epilogue flow */
 function beginEpilogue(){
   // Stop start music, start epilogue music
   startMusic.pause();
@@ -223,7 +227,7 @@ function beginEpilogue(){
   sceneIndex = 0; lineIndex = 0;
   showScene(sceneIndex);
   
-  // Only start typing if there are lines - FIXED
+  // Only start typing if there are lines
   setTimeout(() => {
     if (scenes[0].lines.length > 0) {
       startTyping(scenes[0].lines[0]);
