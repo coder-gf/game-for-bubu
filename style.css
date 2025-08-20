@@ -120,7 +120,7 @@ html, body {
 }
 .fade.show{ opacity: 1; }
 
-/* First Date Scene Styles */
+/* First Date Scene Styles - UPDATED */
 #first-date {
   display: none;
 }
@@ -135,6 +135,7 @@ html, body {
   width: 90%;
   left: 5%;
   height: 35%; /* Increased height */
+  z-index: 100; /* Ensure it's above other elements */
 }
 
 #dialogue-box {
@@ -149,14 +150,15 @@ html, body {
   left: 10%;
   width: 80%; /* Increased width */
   height: 60%; /* Increased height */
-  color: white; /* Changed to white */
+  color: white !important; /* Force white color with !important */
   font-size: 1.6rem; /* Slightly larger font */
   line-height: 1.5;
   overflow: hidden;
   padding: 15px; /* More padding */
   box-sizing: border-box;
   font-family: 'Georgia', serif;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Added shadow for better readability */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Stronger shadow for better readability */
+  z-index: 101; /* Ensure text is above the dialogue box image */
 }
 
 #next-button {
@@ -168,6 +170,7 @@ html, body {
   cursor: pointer;
   background: transparent;
   border: none;
+  z-index: 102; /* Ensure button is above other elements */
 }
 
 /* Typing cursor animation */
@@ -175,7 +178,7 @@ html, body {
   display: inline-block;
   width: 2px;
   height: 1.2em;
-  background-color: white; /* Changed to white */
+  background-color: white !important; /* Force white with !important */
   margin-left: 2px;
   animation: blink 1s infinite;
   vertical-align: middle;
