@@ -131,10 +131,10 @@ html, body {
 
 #dialogue-container {
   position: absolute;
-  bottom: 10%;
-  width: 80%;
-  left: 10%;
-  height: 30%;
+  bottom: 5%;
+  width: 90%;
+  left: 5%;
+  height: 35%; /* Increased height */
 }
 
 #dialogue-box {
@@ -145,17 +145,18 @@ html, body {
 
 #date-dialogue {
   position: absolute;
-  top: 25%;
+  top: 20%; /* Adjusted position */
   left: 10%;
-  width: 75%;
-  height: 45%;
-  color: #333;
-  font-size: 1.4rem;
+  width: 80%; /* Increased width */
+  height: 60%; /* Increased height */
+  color: white; /* Changed to white */
+  font-size: 1.6rem; /* Slightly larger font */
   line-height: 1.5;
   overflow: hidden;
-  padding: 10px;
+  padding: 15px; /* More padding */
   box-sizing: border-box;
   font-family: 'Georgia', serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Added shadow for better readability */
 }
 
 #next-button {
@@ -174,7 +175,7 @@ html, body {
   display: inline-block;
   width: 2px;
   height: 1.2em;
-  background-color: #333;
+  background-color: white; /* Changed to white */
   margin-left: 2px;
   animation: blink 1s infinite;
   vertical-align: middle;
