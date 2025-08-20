@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Visual Novel – Epilogue</title>
+  <title>Visual Novel – First Date</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -22,7 +22,7 @@
     <audio id="start-music" src="music.mp3" preload="auto" loop></audio>
   </div>
 
-  <!-- Epilogue Stage (e1 → e5) -->
+  <!-- Epilogue Stage (e1 → e10) -->
   <div id="epilogue" class="stage">
     <img id="scene-image" class="bg fade" alt="Scene" />
     <!-- Subtitles (no background box) -->
@@ -30,6 +30,20 @@
     
     <!-- Epilogue music -->
     <audio id="epilogue-music" src="epilogue.mp3" preload="auto" loop></audio>
+  </div>
+
+  <!-- First Date Stage -->
+  <div id="first-date" class="stage">
+    <img class="bg" src="bg1.jpg" alt="First Date Background" />
+    
+    <div id="dialogue-container">
+      <img id="dialogue-box" src="d1.png" alt="Dialogue Box" />
+      <div id="date-dialogue"></div>
+      <button id="next-button" aria-label="Next"></button>
+    </div>
+    
+    <!-- Date music -->
+    <audio id="date-music" src="date_music.mp3" preload="auto" loop></audio>
   </div>
 
   <script src="script.js"></script>
