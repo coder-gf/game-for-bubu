@@ -1,6 +1,7 @@
 /* ---------- Audio helpers ---------- */
 const startMusic = document.getElementById('start-music');
 const epilogueMusic = document.getElementById('epilogue-music');
+const dateMusic = document.getElementById('date-music');
 
 /* Best effort: try to autoplay; if the browser blocks it, begin on first user gesture */
 function tryPlay(audio){
@@ -164,7 +165,7 @@ function showScene(idx){
   sceneImage.classList.remove('show');  // start transparent
   sceneImage.src = s.img;
   
-  // Clear subtitle when changing scenes - FIX ADDED HERE
+  // Clear subtitle when changing scenes
   subtitle.textContent = '';
   
   // small delay so the 'show' class transition applies after src swap
@@ -204,8 +205,9 @@ function onEpilogueClick(){
       }
     }, 220);
   } else {
-    // Game completed
+    // Game completed - transition to first date
     document.removeEventListener('pointerdown', onEpilogueClick);
+    beginFirstDate();
   }
 }
 
@@ -236,6 +238,88 @@ function beginEpilogue(){
 
   // Click anywhere to advance
   document.addEventListener('pointerdown', onEpilogueClick);
+}
+
+/* ---------- First Date Logic ---------- */
+const firstDateStage = document.getElementById('first-date');
+const dateDialogue = document.getElementById('date-dialogue');
+const nextButton = document.getElementById('next-button');
+
+// First date dialogues
+const dateDialogues = [
+  "Wow, it's so beautiful out here today. We chose a good day for our first date.",
+  "I got a text from her saying she has reached as well.",
+  "Hmm.. She must be somewhere nearby I guess. I'll send her my location."
+];
+
+let currentDialogueIndex = 0;
+let isDateTyping = false;
+let dateTypingTimer = null;
+
+function typeDateDialogue() {
+  if (currentDialogueIndex >= dateDialogues.length) {
+    // All dialogues completed
+    return;
+  }
+
+  const dialogue = dateDialogues[currentDialogueIndex];
+  let charIndex = 0;
+  dateDialogue.innerHTML = '';
+  isDateTyping = true;
+  
+  nextButton.disabled = true;
+
+  function typeNext() {
+    if (charIndex < dialogue.length) {
+      dateDialogue.innerHTML = dialogue.substring(0, charIndex + 1) + '<span class="typing-cursor"></span>';
+      charIndex++;
+      dateTypingTimer = setTimeout(typeNext, TYPE_MS);
+    } else {
+      isDateTyping = false;
+      nextButton.disabled = false;
+      dateDialogue.innerHTML = dialogue;
+    }
+  }
+
+  typeNext();
+}
+
+function onNextButtonClick() {
+  if (isDateTyping) {
+    // If currently typing, complete immediately
+    clearTimeout(dateTypingTimer);
+    dateDialogue.innerHTML = dateDialogues[currentDialogueIndex];
+    isDateTyping = false;
+    nextButton.disabled = false;
+    return;
+  }
+
+  currentDialogueIndex++;
+  if (currentDialogueIndex < dateDialogues.length) {
+    typeDateDialogue();
+  } else {
+    // All dialogues completed, proceed to next scene
+    // You would add the logic to move to the next date scene here
+    alert("First date scene completed! Would proceed to next scene...");
+  }
+}
+
+function beginFirstDate() {
+  // Stop epilogue music, start date music
+  epilogueMusic.pause();
+  dateMusic.currentTime = 0;
+  tryPlay(dateMusic);
+
+  // Hide epilogue, show first date stage
+  epilogueStage.classList.remove('visible');
+  firstDateStage.classList.add('visible');
+
+  // Start the first dialogue
+  currentDialogueIndex = 0;
+  typeDateDialogue();
+
+  // Add event listener to next button
+  nextButton.addEventListener('click', onNextButtonClick);
 }
 
 /* ---------- Boot ---------- */
