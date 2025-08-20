@@ -139,11 +139,13 @@ html, body {
 }
 
 #dialogue-box {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  min-width: 600px; /* Adjust as needed */
-  min-height: 200px; /* Adjust as needed */
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%); /* centers it horizontally */
+  max-width: 90%;  /* prevents it from going off screen */
+  height: auto;    /* keeps aspect ratio */
+  z-index: 100;
 }
 
 #date-dialogue {
