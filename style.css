@@ -131,21 +131,18 @@ html, body {
 
 #dialogue-container {
   position: absolute;
-  bottom: 5%;
-  width: 90%;
-  left: 5%;
-  height: 35%; /* Increased height */
-  z-index: 100; /* Ensure it's above other elements */
+  bottom: 2%;         /* tuck it just above the bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: auto;        /* don’t force stretch */
+  height: auto;
 }
 
 #dialogue-box {
-  position: absolute;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%); /* centers it horizontally */
-  max-width: 90%;  /* prevents it from going off screen */
-  height: auto;    /* keeps aspect ratio */
-  z-index: 100;
+  display: block;
+  max-width: 90%;     /* responsive sizing */
+  height: auto;       /* preserve aspect ratio */
 }
 
 #date-dialogue {
