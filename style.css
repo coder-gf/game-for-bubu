@@ -197,6 +197,68 @@ html, body {
   z-index: 102;
 }
 
+/* Meeting Scene Styles */
+#meeting-scene {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+
+#meeting-scene.visible {
+  display: block;
+}
+
+#character-container {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 80%;
+  z-index: 70; /* Behind dialogue box */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+#character-sprite {
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+#meeting-scene #dialogue-container {
+  z-index: 80; /* Above character sprite */
+}
+
+#meeting-dialogue {
+  width: 100%;
+  height: 100%;
+  color: white !important;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  font-family: 'Georgia', serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  text-align: left;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#meeting-next-button {
+  position: absolute;
+  bottom: 15%;
+  right: 10%;
+  width: 20%;
+  height: 20%;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  z-index: 102;
+}
+
 /* Typing cursor animation */
 .typing-cursor {
   display: inline-block;
@@ -215,7 +277,7 @@ html, body {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  #date-dialogue {
+  #date-dialogue, #meeting-dialogue {
     font-size: 1.4rem;
     padding: 15px;
   }
@@ -227,5 +289,9 @@ html, body {
   #dialogue-box {
     aspect-ratio: 3 / 1; /* Adjust for mobile */
     min-height: 150px;
+  }
+  
+  #character-container {
+    height: 70%;
   }
 }
