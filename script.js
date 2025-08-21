@@ -187,7 +187,7 @@ function onEpilogueClick(){
   // If line finished, move to next
   lineIndex++;
   if (lineIndex < s.lines.length){
-    startTyping(s.lines[lineIndex]);
+  startTyping(s.lines[lineIndex]);
     return;
   }
 
