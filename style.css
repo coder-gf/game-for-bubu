@@ -139,7 +139,6 @@ html, body {
   transform: translateX(-50%);
   width: 95%;
   max-width: 1200px;
-  height: 70%; /* Increased height */
   z-index: 100;
   display: flex;
   justify-content: center;
@@ -148,10 +147,11 @@ html, body {
 
 #dialogue-box {
   width: 100%;
-  height: 100%;
+  min-height: 200px; /* Minimum height to prevent squashing */
   background: url('d1.png') no-repeat center center;
   background-size: 100% 100%;
   position: relative;
+  aspect-ratio: 3.5 / 1; /* Adjust this ratio based on your dialogue box image */
 }
 
 #text-container {
@@ -165,7 +165,7 @@ html, body {
   justify-content: center;
   align-items: center;
   z-index: 101;
-  padding: 5% 15% 15% 15%;
+  padding: 10% 15% 15% 15%;
   box-sizing: border-box;
 }
 
@@ -181,7 +181,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
 }
 
@@ -222,5 +222,10 @@ html, body {
   
   #text-container {
     padding: 5% 10% 15% 10%;
+  }
+  
+  #dialogue-box {
+    aspect-ratio: 3 / 1; /* Adjust for mobile */
+    min-height: 150px;
   }
 }
