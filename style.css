@@ -179,7 +179,7 @@ html, body {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); /* Stronger shadow */
   text-align: left;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 10px;
   box-sizing: border-box;
