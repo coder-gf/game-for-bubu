@@ -120,9 +120,12 @@ html, body {
 }
 .fade.show{ opacity: 1; }
 
-/* First Date Scene Styles - UPDATED */
+/* First Date Scene Styles - COMPLETELY REVISED */
 #first-date {
   display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
 }
 
 #first-date.visible {
@@ -131,44 +134,51 @@ html, body {
 
 #dialogue-container {
   position: absolute;
-  bottom: 5%; /* Position in bottom 20-25% of screen */
+  bottom: 5%;
   left: 50%;
-  transform: translateX(-50%); /* Center horizontally */
-  width: 95%; /* 95% of screen width */
-  max-width: 1200px; /* Slightly larger max width */
-  height: 25%; /* Height for the bottom area */
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 1200px;
+  height: 30%; /* Increased height */
   z-index: 100;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: flex-end;
 }
 
 #dialogue-box {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover; /* Changed to cover to fill the container */
+}
+
+#text-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 101;
 }
 
 #date-dialogue {
-  position: absolute;
-  top: 30%; /* Position text within the dialogue box */
-  left: 10%;
   width: 80%;
-  height: 50%;
+  height: 60%;
   color: white !important;
-  font-size: 1.6rem;
-  line-height: 1.5;
-  overflow: hidden;
-  padding: 0;
-  box-sizing: border-box;
+  font-size: 1.8rem; /* Slightly larger font */
+  line-height: 1.6;
   font-family: 'Georgia', serif;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-  z-index: 101;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); /* Stronger shadow */
+  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 #next-button {
