@@ -131,35 +131,42 @@ html, body {
 
 #dialogue-container {
   position: absolute;
-  bottom: 2%;         /* tuck it just above the bottom */
+  bottom: 2%; /* 2% above bottom edge */
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%); /* Center horizontally */
+  width: 80%; /* 80% of screen width */
+  max-width: 1000px; /* Maximum width */
   z-index: 100;
-  width: auto;        /* don’t force stretch */
-  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #dialogue-box {
-  display: block;
-  width: 100%;     /* responsive sizing */
-  height: auto;       /* preserve aspect ratio */
+  width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  object-fit: contain;
 }
 
 #date-dialogue {
   position: absolute;
-  top: 20%; /* Adjusted position */
-  left: 8%;
-  width: 84%; /* Increased width */
-  height: 60%; /* Increased height */
-  color: white !important; /* Force white color with !important */
-  font-size: 1.6rem; /* Slightly larger font */
+  top: 20%; /* Position text 20% from top of dialogue box */
+  left: 10%; /* 10% margin on left */
+  width: 80%; /* 80% width of dialogue box */
+  height: 60%;
+  color: white !important;
+  font-size: 1.6rem;
   line-height: 1.5;
   overflow: hidden;
-  padding: 15px; /* More padding */
+  padding: 0; /* Remove padding since we're using % positioning */
   box-sizing: border-box;
   font-family: 'Georgia', serif;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Stronger shadow for better readability */
-  z-index: 101; /* Ensure text is above the dialogue box image */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 #next-button {
@@ -171,7 +178,7 @@ html, body {
   cursor: pointer;
   background: transparent;
   border: none;
-  z-index: 102; /* Ensure button is above other elements */
+  z-index: 102;
 }
 
 /* Typing cursor animation */
@@ -179,7 +186,7 @@ html, body {
   display: inline-block;
   width: 2px;
   height: 1.2em;
-  background-color: white !important; /* Force white with !important */
+  background-color: white !important;
   margin-left: 2px;
   animation: blink 1s infinite;
   vertical-align: middle;
