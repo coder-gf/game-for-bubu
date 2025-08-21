@@ -22,22 +22,27 @@ html, body {
 
 .stage {
   position: fixed; inset: 0;
-  display: grid; place-items: center;
-  opacity: 0; pointer-events: none; transition: opacity var(--fade-ms) ease;
+  display: none;
+  opacity: 0; 
+  transition: opacity var(--fade-ms) ease;
 }
 
-.stage.visible { opacity: 1; pointer-events: auto; }
+.stage.visible { 
+  display: block;
+  opacity: 1; 
+}
 
 /* Make the image fill the entire browser viewport while keeping the whole image visible (no cropping) */
 .bg {
-  width: 100vw;                /* make the image element span the full viewport width */
-  height: 100vh;               /* and the full viewport height */
-  object-fit: contain;         /* scale the image so it fits inside the element WITHOUT cropping */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* Changed from contain to cover to fix black areas */
   object-position: center center; /* keep the image centered */
   user-select: none;
   -webkit-user-drag: none;
-  max-width: 100%;
-  max-height: 100%;
 }
 
 /* Start button (invisible overlay) positioned over the grey oval on start.jpg
@@ -120,19 +125,8 @@ html, body {
 }
 .fade.show{ opacity: 1; }
 
-/* First Date Scene Styles - COMPLETELY REVISED */
-#first-date {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-}
-
-#first-date.visible {
-  display: block;
-}
-
-#dialogue-container {
+/* Dialogue container - shared between all scenes */
+.dialogue-container {
   position: absolute;
   bottom: 1%;
   left: 50%;
@@ -145,7 +139,7 @@ html, body {
   align-items: flex-end;
 }
 
-#dialogue-box {
+.dialogue-box {
   width: 100%;
   min-height: 200px; /* Minimum height to prevent squashing */
   background: url('d1.png') no-repeat center center;
@@ -154,7 +148,7 @@ html, body {
   aspect-ratio: 4 / 3; /* Adjust this ratio based on your dialogue box image */
 }
 
-#text-container {
+.text-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -169,7 +163,7 @@ html, body {
   box-sizing: border-box;
 }
 
-#date-dialogue {
+.dialogue-text {
   width: 100%;
   height: 100%;
   color: white !important;
@@ -185,7 +179,7 @@ html, body {
   box-sizing: border-box;
 }
 
-#next-button {
+.next-button {
   position: absolute;
   bottom: 15%;
   right: 10%;
@@ -198,65 +192,22 @@ html, body {
 }
 
 /* Meeting Scene Styles */
-#meeting-scene {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-}
-
-#meeting-scene.visible {
-  display: block;
-}
-
 #character-container {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  height: 80%;
-  z-index: 70; /* Behind dialogue box */
+  height: 70%;
+  z-index: 50; /* Behind dialogue box */
   display: flex;
   align-items: flex-end;
   justify-content: center;
 }
 
-#character-sprite {
+.character-sprite {
   height: 100%;
   max-width: 100%;
   object-fit: contain;
-}
-
-#meeting-scene #dialogue-container {
-  z-index: 80; /* Above character sprite */
-}
-
-#meeting-dialogue {
-  width: 100%;
-  height: 100%;
-  color: white !important;
-  font-size: 1.5rem;
-  line-height: 1.6;
-  font-family: 'Georgia', serif;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-  text-align: left;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-#meeting-next-button {
-  position: absolute;
-  bottom: 15%;
-  right: 10%;
-  width: 20%;
-  height: 20%;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  z-index: 102;
 }
 
 /* Typing cursor animation */
@@ -277,21 +228,21 @@ html, body {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  #date-dialogue, #meeting-dialogue {
+  .dialogue-text {
     font-size: 1.4rem;
     padding: 15px;
   }
   
-  #text-container {
+  .text-container {
     padding: 5% 10% 15% 10%;
   }
   
-  #dialogue-box {
+  .dialogue-box {
     aspect-ratio: 3 / 1; /* Adjust for mobile */
     min-height: 150px;
   }
   
   #character-container {
-    height: 70%;
+    height: 60%;
   }
 }
