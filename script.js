@@ -2,6 +2,7 @@
 const startMusic = document.getElementById('start-music');
 const epilogueMusic = document.getElementById('epilogue-music');
 const dateMusic = document.getElementById('date-music');
+const meetingMusic = document.getElementById('meeting-music');
 
 /* Best effort: try to autoplay; if the browser blocks it, begin on first user gesture */
 function tryPlay(audio){
@@ -298,9 +299,8 @@ function onNextButtonClick() {
   if (currentDialogueIndex < dateDialogues.length) {
     typeDateDialogue();
   } else {
-    // All dialogues completed, proceed to next scene
-    // You would add the logic to move to the next date scene here
-    alert("First date scene completed! Would proceed to next scene...");
+    // All dialogues completed, proceed to meeting scene
+    beginMeetingScene();
   }
 }
 
@@ -326,6 +326,145 @@ function beginFirstDate() {
   nextButton.addEventListener('click', onNextButtonClick);
 }
 
+/* ---------- Meeting Scene Logic ---------- */
+const meetingSceneStage = document.getElementById('meeting-scene');
+const characterSprite = document.getElementById('character-sprite');
+const meetingDialogue = document.getElementById('meeting-dialogue');
+const meetingNextButton = document.getElementById('meeting-next-button');
+
+// Meeting scene steps
+const meetingSteps = [
+  {
+    sprite: 'p1.png',
+    dialogues: [
+      "Oh, there she is.",
+      "Damn… She's kinda cute. She hasn't noticed me standing here yet."
+    ]
+  },
+  {
+    sprite: 'p1.png',
+    dialogues: [
+      "I waved my arm for her, and she noticed me.",
+      "She's walking towards me hurriedly."
+    ]
+  }
+];
+
+let currentMeetingStep = 0;
+let currentDialogueInStep = 0;
+let isMeetingTyping = false;
+let meetingTypingTimer = null;
+
+function typeMeetingDialogue() {
+  if (currentMeetingStep >= meetingSteps.length) {
+    // All steps completed
+    return;
+  }
+
+  const step = meetingSteps[currentMeetingStep];
+  if (currentDialogueInStep >= step.dialogues.length) {
+    // Move to next step
+    currentMeetingStep++;
+    currentDialogueInStep = 0;
+    
+    if (currentMeetingStep >= meetingSteps.length) {
+      // All steps completed
+      return;
+    }
+    
+    // Update sprite for new step
+    const newStep = meetingSteps[currentMeetingStep];
+    characterSprite.src = newStep.sprite;
+    
+    // Start typing first dialogue of new step
+    typeMeetingDialogue();
+    return;
+  }
+
+  const dialogue = step.dialogues[currentDialogueInStep];
+  let charIndex = 0;
+  meetingDialogue.innerHTML = '';
+  isMeetingTyping = true;
+  
+  meetingNextButton.disabled = true;
+
+  function typeNext() {
+    if (charIndex < dialogue.length) {
+      meetingDialogue.innerHTML = dialogue.substring(0, charIndex + 1) + '<span class="typing-cursor"></span>';
+      charIndex++;
+      meetingTypingTimer = setTimeout(typeNext, TYPE_MS);
+    } else {
+      isMeetingTyping = false;
+      meetingNextButton.disabled = false;
+      meetingDialogue.innerHTML = dialogue;
+    }
+  }
+
+  typeNext();
+}
+
+function onMeetingNextButtonClick() {
+  if (isMeetingTyping) {
+    // If currently typing, complete immediately
+    clearTimeout(meetingTypingTimer);
+    const step = meetingSteps[currentMeetingStep];
+    meetingDialogue.innerHTML = step.dialogues[currentDialogueInStep];
+    isMeetingTyping = false;
+    meetingNextButton.disabled = false;
+    return;
+  }
+
+  currentDialogueInStep++;
+  if (currentDialogueInStep < meetingSteps[currentMeetingStep].dialogues.length) {
+    typeMeetingDialogue();
+  } else {
+    // Move to next step
+    currentMeetingStep++;
+    currentDialogueInStep = 0;
+    
+    if (currentMeetingStep < meetingSteps.length) {
+      // Update sprite for new step
+      const step = meetingSteps[currentMeetingStep];
+      characterSprite.src = step.sprite;
+      
+      // Start typing first dialogue of new step
+      typeMeetingDialogue();
+    } else {
+      // All steps completed
+      alert("Meeting scene completed! Would proceed to next scene...");
+    }
+  }
+}
+
+function beginMeetingScene() {
+  // Stop date music, start meeting music
+  dateMusic.pause();
+  meetingMusic.currentTime = 0;
+  
+  // Hide first date, show meeting scene
+  firstDateStage.classList.remove('visible');
+  meetingSceneStage.classList.add('visible');
+  
+  // Try to play the meeting music after a short delay
+  setTimeout(() => {
+    tryPlay(meetingMusic);
+  }, 100);
+
+  // Initialize meeting scene
+  currentMeetingStep = 0;
+  currentDialogueInStep = 0;
+  
+  // Set initial character sprite
+  const step = meetingSteps[currentMeetingStep];
+  characterSprite.src = step.sprite;
+  
+  // Start the first dialogue
+  typeMeetingDialogue();
+
+  // Add event listener to next button
+  meetingNextButton.addEventListener('click', onMeetingNextButtonClick);
+}
+
 /* ---------- Boot ---------- */
 window.addEventListener('load', () => {
   // Try to start start-screen music
@@ -340,6 +479,11 @@ window.addEventListener('load', () => {
   
   // Preload the date music
   dateMusic.load();
+  
+  // Preload meeting scene assets
+  meetingSteps.forEach(step => {
+    new Image().src = step.sprite;
+  });
 });
 
 /* Start button -> enter epilogue */
