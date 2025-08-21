@@ -173,7 +173,7 @@ html, body {
   width: 100%;
   height: 100%;
   color: white !important;
-  font-size: 1.8rem; /* Slightly larger font */
+  font-size: 1.5rem; /* Slightly larger font */
   line-height: 1.6;
   font-family: 'Georgia', serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); /* Stronger shadow */
