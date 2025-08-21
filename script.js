@@ -187,7 +187,7 @@ function onEpilogueClick(){
   // If line finished, move to next
   lineIndex++;
   if (lineIndex < s.lines.length){
-  startTyping(s.lines[lineIndex]);
+    startTyping(s.lines[lineIndex]);
     return;
   }
 
@@ -308,11 +308,15 @@ function beginFirstDate() {
   // Stop epilogue music, start date music
   epilogueMusic.pause();
   dateMusic.currentTime = 0;
-  tryPlay(dateMusic);
-
+  
   // Hide epilogue, show first date stage
   epilogueStage.classList.remove('visible');
   firstDateStage.classList.add('visible');
+  
+  // Try to play the date music after a short delay to ensure the scene is visible
+  setTimeout(() => {
+    tryPlay(dateMusic);
+  }, 100);
 
   // Start the first dialogue
   currentDialogueIndex = 0;
@@ -333,6 +337,9 @@ window.addEventListener('load', () => {
   scenes.forEach(scene => {
     new Image().src = scene.img;
   });
+  
+  // Preload the date music
+  dateMusic.load();
 });
 
 /* Start button -> enter epilogue */
