@@ -131,34 +131,36 @@ html, body {
 
 #dialogue-container {
   position: absolute;
-  bottom: 2%; /* 2% above bottom edge */
+  bottom: 5%; /* Position in bottom 20-25% of screen */
   left: 50%;
   transform: translateX(-50%); /* Center horizontally */
-  width: 80%; /* 80% of screen width */
-  max-width: 1000px; /* Maximum width */
+  width: 95%; /* 95% of screen width */
+  max-width: 1200px; /* Slightly larger max width */
+  height: 25%; /* Height for the bottom area */
   z-index: 100;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-end;
 }
 
 #dialogue-box {
   width: 100%;
-  height: auto; /* Maintain aspect ratio */
+  height: 100%;
   object-fit: contain;
 }
 
 #date-dialogue {
   position: absolute;
-  top: 20%; /* Position text 20% from top of dialogue box */
-  left: 10%; /* 10% margin on left */
-  width: 80%; /* 80% width of dialogue box */
-  height: 60%;
+  top: 30%; /* Position text within the dialogue box */
+  left: 10%;
+  width: 80%;
+  height: 50%;
   color: white !important;
   font-size: 1.6rem;
   line-height: 1.5;
   overflow: hidden;
-  padding: 0; /* Remove padding since we're using % positioning */
+  padding: 0;
   box-sizing: border-box;
   font-family: 'Georgia', serif;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
