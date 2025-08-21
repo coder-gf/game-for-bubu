@@ -177,7 +177,7 @@ html, body {
   line-height: 1.6;
   font-family: 'Georgia', serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); /* Stronger shadow */
-  text-align: center;
+  text-align: left;
   display: flex;
   align-items: center;
   justify-content: center;
