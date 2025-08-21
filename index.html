@@ -49,6 +49,28 @@
     <audio id="date-music" src="zelda.mp3" preload="auto" loop></audio>
   </div>
 
+  <!-- Meeting Scene Stage -->
+  <div id="meeting-scene" class="stage">
+    <img class="bg" src="bg1.jpg" alt="Meeting Scene Background" />
+    
+    <!-- Character sprite container -->
+    <div id="character-container">
+      <img id="character-sprite" src="" alt="Character" />
+    </div>
+    
+    <div id="dialogue-container">
+      <div id="dialogue-box">
+        <div id="text-container">
+          <div id="meeting-dialogue"></div>
+        </div>
+        <button id="meeting-next-button" aria-label="Next"></button>
+      </div>
+    </div>
+    
+    <!-- Meeting scene music (could reuse date music) -->
+    <audio id="meeting-music" src="zelda.mp3" preload="auto" loop></audio>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
