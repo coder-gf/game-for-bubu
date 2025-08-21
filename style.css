@@ -134,7 +134,7 @@ html, body {
 
 #dialogue-container {
   position: absolute;
-  bottom: 2%;
+  bottom: 1%;
   left: 50%;
   transform: translateX(-50%);
   width: 95%;
@@ -165,7 +165,7 @@ html, body {
   justify-content: center;
   align-items: flex-start;
   z-index: 101;
-  padding: 69% 12% 14% 12%;
+  padding: 60% 12% 14% 12%;
   box-sizing: border-box;
 }
 
