@@ -141,15 +141,15 @@ html, body {
 
 #dialogue-box {
   display: block;
-  max-width: 90%;     /* responsive sizing */
+  width: 100%;     /* responsive sizing */
   height: auto;       /* preserve aspect ratio */
 }
 
 #date-dialogue {
   position: absolute;
   top: 20%; /* Adjusted position */
-  left: 10%;
-  width: 80%; /* Increased width */
+  left: 8%;
+  width: 84%; /* Increased width */
   height: 60%; /* Increased height */
   color: white !important; /* Force white color with !important */
   font-size: 1.6rem; /* Slightly larger font */
