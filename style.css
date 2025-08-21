@@ -139,7 +139,7 @@ html, body {
   transform: translateX(-50%);
   width: 95%;
   max-width: 1200px;
-  height: 30%; /* Increased height */
+  height: 70%; /* Increased height */
   z-index: 100;
   display: flex;
   justify-content: center;
