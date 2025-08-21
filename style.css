@@ -151,7 +151,7 @@ html, body {
   background: url('d1.png') no-repeat center center;
   background-size: 100% 100%;
   position: relative;
-  aspect-ratio: 3.5 / 1; /* Adjust this ratio based on your dialogue box image */
+  aspect-ratio: 4 / 3; /* Adjust this ratio based on your dialogue box image */
 }
 
 #text-container {
