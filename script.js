@@ -277,7 +277,7 @@ const firstDateScenes = [
     background: 'bg1.jpg',
     sprites: [
       {
-        image: 'p1.png',
+        image: 'p2.png',
         position: 'center'
       }
     ],
