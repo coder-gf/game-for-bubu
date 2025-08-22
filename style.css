@@ -138,9 +138,6 @@ html, body {
   inset: 0;
   pointer-events: none;
   z-index: 60; /* Behind dialogue box but above background */
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
 }
 
 .character-sprite {
