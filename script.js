@@ -244,25 +244,104 @@ function beginEpilogue(){
 const firstDateStage = document.getElementById('first-date');
 const dateDialogue = document.getElementById('date-dialogue');
 const nextButton = document.getElementById('next-button');
+const spriteContainer = document.getElementById('sprite-container');
 
-// First date dialogues
-const dateDialogues = [
-  "Wow, it's so beautiful out here today. We chose a good day for our first date.",
-  "I got a text from her saying she has reached as well.",
-  "Hmm.. She must be somewhere nearby I guess. I'll send her my location."
+// First date scenes with dialogues and sprites
+const firstDateScenes = [
+  // Initial dialogues
+  {
+    background: 'bg1.jpg',
+    sprites: [],
+    dialogues: [
+      "Wow, it's so beautiful out here today. We chose a good day for our first date.",
+      "I got a text from her saying she has reached as well.",
+      "Hmm.. She must be somewhere nearby I guess. I'll send her my location."
+    ]
+  },
+  // New scene with character sprite and dialogues
+  {
+    background: 'bg1.jpg',
+    sprites: [
+      {
+        image: 'p1.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      "Oh, there she is.",
+      "Damn… She's kinda cute. She hasn't noticed me standing here yet."
+    ]
+  },
+  // Second part of the new scene
+  {
+    background: 'bg1.jpg',
+    sprites: [
+      {
+        image: 'p1.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      "I waved my arm for her, and she noticed me.",
+      "She's walking towards me hurriedly."
+    ]
+  }
 ];
 
+let currentDateSceneIndex = 0;
 let currentDialogueIndex = 0;
 let isDateTyping = false;
 let dateTypingTimer = null;
 
+function showSprite(spriteInfo) {
+  spriteContainer.innerHTML = ''; // Clear previous sprites
+  
+  if (spriteInfo.image) {
+    const sprite = document.createElement('img');
+    sprite.src = spriteInfo.image;
+    sprite.className = 'character-sprite';
+    
+    // Position the sprite
+    if (spriteInfo.position === 'center') {
+      sprite.classList.add('sprite-center');
+    }
+    // Add more position options as needed
+    
+    spriteContainer.appendChild(sprite);
+  }
+}
+
+function loadDateScene(sceneIndex) {
+  const scene = firstDateScenes[sceneIndex];
+  
+  // Update background if needed
+  const bg = firstDateStage.querySelector('.bg');
+  if (bg.src !== scene.background) {
+    bg.src = scene.background;
+  }
+  
+  // Show sprites
+  if (scene.sprites && scene.sprites.length > 0) {
+    showSprite(scene.sprites[0]); // For now, just show the first sprite
+  } else {
+    spriteContainer.innerHTML = ''; // Clear sprites if none in this scene
+  }
+  
+  // Reset dialogue index and start typing
+  currentDialogueIndex = 0;
+  typeDateDialogue();
+}
+
 function typeDateDialogue() {
-  if (currentDialogueIndex >= dateDialogues.length) {
-    // All dialogues completed
+  const scene = firstDateScenes[currentDateSceneIndex];
+  
+  if (currentDialogueIndex >= scene.dialogues.length) {
+    // All dialogues in this scene completed
+    nextButton.disabled = false;
     return;
   }
 
-  const dialogue = dateDialogues[currentDialogueIndex];
+  const dialogue = scene.dialogues[currentDialogueIndex];
   let charIndex = 0;
   dateDialogue.innerHTML = '';
   isDateTyping = true;
@@ -285,22 +364,29 @@ function typeDateDialogue() {
 }
 
 function onNextButtonClick() {
+  const scene = firstDateScenes[currentDateSceneIndex];
+  
   if (isDateTyping) {
     // If currently typing, complete immediately
     clearTimeout(dateTypingTimer);
-    dateDialogue.innerHTML = dateDialogues[currentDialogueIndex];
+    dateDialogue.innerHTML = scene.dialogues[currentDialogueIndex];
     isDateTyping = false;
     nextButton.disabled = false;
     return;
   }
 
   currentDialogueIndex++;
-  if (currentDialogueIndex < dateDialogues.length) {
+  if (currentDialogueIndex < scene.dialogues.length) {
     typeDateDialogue();
   } else {
-    // All dialogues completed, proceed to next scene
-    // You would add the logic to move to the next date scene here
-    alert("First date scene completed! Would proceed to next scene...");
+    // All dialogues in this scene completed, move to next scene
+    currentDateSceneIndex++;
+    if (currentDateSceneIndex < firstDateScenes.length) {
+      loadDateScene(currentDateSceneIndex);
+    } else {
+      // All first date scenes completed, proceed to next part of the game
+      alert("First date scenes completed! Would proceed to next part...");
+    }
   }
 }
 
@@ -318,9 +404,9 @@ function beginFirstDate() {
     tryPlay(dateMusic);
   }, 100);
 
-  // Start the first dialogue
-  currentDialogueIndex = 0;
-  typeDateDialogue();
+  // Start the first scene
+  currentDateSceneIndex = 0;
+  loadDateScene(currentDateSceneIndex);
 
   // Add event listener to next button
   nextButton.addEventListener('click', onNextButtonClick);
@@ -340,6 +426,12 @@ window.addEventListener('load', () => {
   
   // Preload the date music
   dateMusic.load();
+  
+  // Preload character sprites
+  const spritesToPreload = ['p1.png'];
+  spritesToPreload.forEach(sprite => {
+    new Image().src = sprite;
+  });
 });
 
 /* Start button -> enter epilogue */
