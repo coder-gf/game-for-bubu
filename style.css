@@ -178,16 +178,17 @@ html, body {
 
 #text-container {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 66%;   /* start of blue box */
+  left: 12%;
+  width: 76%; /* 100% - (12% + 12%) */
+  height: 26%; /* 306px / 1152px ≈ 26% */
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+
   z-index: 101;
-  padding: 66% 12% 8% 12%;
   box-sizing: border-box;
 }
 
