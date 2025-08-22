@@ -132,6 +132,29 @@ html, body {
   display: block;
 }
 
+/* Sprite container for character images */
+#sprite-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60; /* Behind dialogue box but above background */
+}
+
+.character-sprite {
+  position: absolute;
+  max-height: 70vh;
+  max-width: 40vw;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.sprite-center {
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 #dialogue-container {
   position: absolute;
   bottom: 1%;
@@ -227,5 +250,10 @@ html, body {
   #dialogue-box {
     aspect-ratio: 3 / 1; /* Adjust for mobile */
     min-height: 150px;
+  }
+  
+  .character-sprite {
+    max-height: 50vh;
+    max-width: 60vw;
   }
 }
