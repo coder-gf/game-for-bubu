@@ -245,6 +245,7 @@ const firstDateStage = document.getElementById('first-date');
 const dateDialogue = document.getElementById('date-dialogue');
 const nextButton = document.getElementById('next-button');
 const spriteContainer = document.getElementById('sprite-container');
+const dialogueBox = document.getElementById('dialogue-box');
 
 // First date scenes with dialogues and sprites
 const firstDateScenes = [
@@ -253,9 +254,9 @@ const firstDateScenes = [
     background: 'bg1.jpg',
     sprites: [],
     dialogues: [
-      "Wow, it's so beautiful out here today. We chose a good day for our first date.",
-      "I got a text from her saying she has reached as well.",
-      "Hmm.. She must be somewhere nearby I guess. I'll send her my location."
+      { speaker: 'kk', text: "Wow, it's so beautiful out here today. We chose a good day for our first date." },
+      { speaker: 'kk', text: "I got a text from her saying she has reached as well." },
+      { speaker: 'kk', text: "Hmm.. She must be somewhere nearby I guess. I'll send her my location." }
     ]
   },
   // New scene with character sprite and dialogues
@@ -268,8 +269,8 @@ const firstDateScenes = [
       }
     ],
     dialogues: [
-      "Oh, there she is.",
-      "Damn… She's kinda cute. She hasn't noticed me standing here yet."
+      { speaker: 'kk', text: "Oh, there she is." },
+      { speaker: 'kk', text: "Damn… She's kinda cute. She hasn't noticed me standing here yet." }
     ]
   },
   // Second part of the new scene
@@ -282,8 +283,24 @@ const firstDateScenes = [
       }
     ],
     dialogues: [
-      "I waved my arm for her, and she noticed me.",
-      "She's walking towards me hurriedly."
+      { speaker: 'kk', text: "I waved my arm for her, and she noticed me." },
+      { speaker: 'kk', text: "She's walking towards me hurriedly." }
+    ]
+  },
+  // New scene with p3.png sprite and character dialogues
+  {
+    background: 'bg1.jpg',
+    sprites: [
+      {
+        image: 'p3.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kk', text: "(she looks nervous)." },
+      { speaker: 'kc', text: "Hiii.. You're Kinshuk right?" },
+      { speaker: 'kk', text: "Yup, that's me. So how are you doing today Kriti? This place wasn't too far for you, right?" },
+      { speaker: 'kc', text: "Nooooo not at all. And it's really pretty out here." }
     ]
   }
 ];
@@ -308,6 +325,14 @@ function showSprite(spriteInfo) {
     // Add more position options as needed
     
     spriteContainer.appendChild(sprite);
+  }
+}
+
+function updateDialogueBox(speaker) {
+  if (speaker === 'kk') {
+    dialogueBox.style.backgroundImage = "url('d1.png')";
+  } else if (speaker === 'kc') {
+    dialogueBox.style.backgroundImage = "url('d2.png')";
   }
 }
 
@@ -348,15 +373,18 @@ function typeDateDialogue() {
   
   nextButton.disabled = true;
 
+  // Update dialogue box based on speaker
+  updateDialogueBox(dialogue.speaker);
+
   function typeNext() {
-    if (charIndex < dialogue.length) {
-      dateDialogue.innerHTML = dialogue.substring(0, charIndex + 1) + '<span class="typing-cursor"></span>';
+    if (charIndex < dialogue.text.length) {
+      dateDialogue.innerHTML = dialogue.text.substring(0, charIndex + 1) + '<span class="typing-cursor"></span>';
       charIndex++;
       dateTypingTimer = setTimeout(typeNext, TYPE_MS);
     } else {
       isDateTyping = false;
       nextButton.disabled = false;
-      dateDialogue.innerHTML = dialogue;
+      dateDialogue.innerHTML = dialogue.text;
     }
   }
 
@@ -369,7 +397,7 @@ function onNextButtonClick() {
   if (isDateTyping) {
     // If currently typing, complete immediately
     clearTimeout(dateTypingTimer);
-    dateDialogue.innerHTML = scene.dialogues[currentDialogueIndex];
+    dateDialogue.innerHTML = scene.dialogues[currentDialogueIndex].text;
     isDateTyping = false;
     nextButton.disabled = false;
     return;
@@ -427,8 +455,8 @@ window.addEventListener('load', () => {
   // Preload the date music
   dateMusic.load();
   
-  // Preload character sprites
-  const spritesToPreload = ['p1.png'];
+  // Preload character sprites and dialogue boxes
+  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'd1.png', 'd2.png'];
   spritesToPreload.forEach(sprite => {
     new Image().src = sprite;
   });
