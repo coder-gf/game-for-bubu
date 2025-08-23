@@ -2,6 +2,7 @@
 const startMusic = document.getElementById('start-music');
 const epilogueMusic = document.getElementById('epilogue-music');
 const dateMusic = document.getElementById('date-music');
+const candyMusic = document.getElementById('candy-music');
 
 /* Best effort: try to autoplay; if the browser blocks it, begin on first user gesture */
 function tryPlay(audio){
@@ -248,6 +249,10 @@ const spriteContainer = document.getElementById('sprite-container');
 const dialogueBox = document.getElementById('dialogue-box');
 const textContainer = document.getElementById('text-container');
 
+// Quiz tracking variables
+let candyShopScore = 0;
+let currentQuestionIndex = 0;
+
 // First date scenes with dialogues and sprites
 const firstDateScenes = [
   // Initial dialogues
@@ -340,6 +345,311 @@ const firstDateScenes = [
         }
       }
     ]
+  },
+  // Candy shop entrance
+  {
+    background: 'bg2.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "The candy shop is really cute and cozy. It's got the type of candies you don't see everywhere." }
+    ]
+  },
+  // p8.png appears
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p8.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Look! They have all the rare candies!" },
+      { speaker: 'kk', text: "(she looks a little crazy...)" },
+      { speaker: 'kk', text: "Did you know that candy dates back to ancient Egypt? They used honey, fruits & nuts to make candy." }
+    ]
+  },
+  // p7.png appears
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p7.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Wow… You seem to know a lot about candy. I'd love to listen to your podcast if you had one." },
+      { speaker: 'kk', text: "Ohhh this is nothing. I will tell you so many more interesting things." }
+    ]
+  },
+  // p5.png appears
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p5.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "You're really fun to be around." },
+      { speaker: 'kk', text: "(Great...I've managed to amuse her without much effort.)" },
+      { speaker: 'kk', text: "(she's rummaging around the shelves while I follow her.)" }
+    ]
+  },
+  // p3.png appears
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p3.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Y'know… l have something important to ask you." },
+      { speaker: 'kc', text: "Actually… A bunch of questions." }
+    ]
+  },
+  // Instruction text (yellow)
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p3.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'instruction', text: "Instruction: The more answers you get correct, the more your bonding will increase." }
+    ]
+  },
+  // p4.png appears - Question 1
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p4.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Which of these do you like better, Pepsi or coke?" }
+    ],
+    choices: [
+      { 
+        text: "Pepsi", 
+        result: {
+          correct: true,
+          sprite: null,
+          dialogues: [
+            { speaker: 'kc', text: "Hmmm...okay. This one was easy. I'm not impressed yet." },
+            { speaker: 'kk', text: "(This was the important question?)" }
+          ]
+        }
+      },
+      { 
+        text: "Coke", 
+        result: {
+          correct: false,
+          sprite: null,
+          dialogues: [
+            { speaker: 'kc', text: "An okay choice. I don't hate coke either." },
+            { speaker: 'kk', text: "(This was the important question?)" }
+          ]
+        }
+      }
+    ]
+  },
+  // Question 2
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p4.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "So, Kit Kat or snickers?" }
+    ],
+    choices: [
+      { 
+        text: "Kit Kat", 
+        result: {
+          correct: true,
+          sprite: 'p5.png',
+          dialogues: [
+            { speaker: 'kc', text: "You're just like me, I think we'll get along well!" }
+          ]
+        }
+      },
+      { 
+        text: "Snickers", 
+        result: {
+          correct: false,
+          sprite: 'p6.png',
+          dialogues: [
+            { speaker: 'kc', text: "Damn, really? I think we have different tastes then…" }
+          ]
+        }
+      }
+    ]
+  },
+  // Question 3
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p4.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Next question, do you prefer chocolate milkshake or strawberry milkshake?" }
+    ],
+    choices: [
+      { 
+        text: "Chocolate", 
+        result: {
+          correct: false,
+          sprite: 'p4.png',
+          dialogues: [
+            { speaker: 'kc', text: "Really? Ugh..." },
+            { speaker: 'kk', text: "(oops… Why does she look so serious?)" }
+          ]
+        }
+      },
+      { 
+        text: "Strawberry", 
+        result: {
+          correct: true,
+          sprite: 'p7.png',
+          dialogues: [
+            { speaker: 'kc', text: "Wow, you've really sparked my interest." }
+          ]
+        }
+      }
+    ]
+  },
+  // Question 4 setup
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p3.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Let's see…" },
+      { speaker: 'kk', text: "(She looks around as if she's searching for more questions in the shop's shelves.)" }
+    ]
+  },
+  // p4.png appears - Question 4
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p4.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Okay so, Are you a sweet or savoury type of guy?" }
+    ],
+    choices: [
+      { 
+        text: "Sweet", 
+        result: {
+          correct: false,
+          sprite: 'p6.png',
+          dialogues: [
+            { speaker: 'kc', text: "Hmm… Not quite the answer I was expecting. But I'll let this one slide." }
+          ]
+        }
+      },
+      { 
+        text: "Savoury", 
+        result: {
+          correct: true,
+          sprite: 'p7.png',
+          dialogues: [
+            { speaker: 'kc', text: "Oh my god, the similarities between us are growing…" }
+          ]
+        }
+      },
+      { 
+        text: "I'll be sweet to you all day, but I might get spicy at times…", 
+        result: {
+          correct: true,
+          sprite: 'p8.png',
+          dialogues: [
+            { speaker: 'kc', text: "Heyy! Don't make me blush so much in broad daylight!" }
+          ]
+        }
+      }
+    ]
+  },
+  // Question 5 setup
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p3.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Okay! Final question for you. What's the best Kurkure flavour?" }
+    ]
+  },
+  // p4.png appears - Question 5
+  {
+    background: 'bg2.jpg',
+    sprites: [
+      {
+        image: 'p4.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [],
+    choices: [
+      { 
+        text: "Green", 
+        result: {
+          correct: true,
+          sprite: 'p5.png',
+          dialogues: [
+            { speaker: 'kc', text: "OMG! That's my favourite too! You really have amazing taste buds!" },
+            { speaker: 'kk', text: "(Okay...l lied but it worked, haha.)" }
+          ]
+        }
+      },
+      { 
+        text: "Orange", 
+        result: {
+          correct: false,
+          sprite: 'p6.png',
+          dialogues: [
+            { speaker: 'kc', text: "Really? Okay.." },
+            { speaker: 'kk', text: "(She's speechless.)" }
+          ]
+        }
+      },
+      { 
+        text: "Hey, there's a pretty little park just outside, let's buy all your snacks and eat them there.", 
+        result: {
+          correct: true,
+          sprite: 'p7.png',
+          dialogues: [
+            { speaker: 'kc', text: "That sounds amazing, let's go!!" },
+            { speaker: 'kk', text: "(Phew… I've distracted her successfully.)" }
+          ]
+        }
+      }
+    ]
   }
 ];
 
@@ -369,8 +679,13 @@ function showSprite(spriteInfo) {
 function updateDialogueBox(speaker) {
   if (speaker === 'kk') {
     dialogueBox.style.backgroundImage = "url('d1.png')";
+    dateDialogue.style.color = "white";
   } else if (speaker === 'kc') {
     dialogueBox.style.backgroundImage = "url('d2.png')";
+    dateDialogue.style.color = "white";
+  } else if (speaker === 'instruction') {
+    // Keep the current dialogue box but change text color to yellow
+    dateDialogue.style.color = "yellow";
   }
 }
 
@@ -398,10 +713,15 @@ function handleChoice(choice) {
   const choiceButtons = document.querySelectorAll('.choice-button');
   choiceButtons.forEach(button => button.remove());
   
+  // Update score if choice is correct
+  if (choice.result.correct) {
+    candyShopScore++;
+  }
+  
   // Show the next button again
   nextButton.style.display = 'block';
   
-  // Update sprite
+  // Update sprite if specified
   if (choice.result.sprite) {
     showSprite({ image: choice.result.sprite, position: 'center' });
   }
@@ -412,6 +732,9 @@ function handleChoice(choice) {
   // Reset dialogue index and start typing the result
   currentDialogueIndex = 0;
   typeDateDialogue();
+  
+  // Move to next question after this one is completed
+  currentQuestionIndex++;
 }
 
 function loadDateScene(sceneIndex) {
@@ -421,6 +744,13 @@ function loadDateScene(sceneIndex) {
   const bg = firstDateStage.querySelector('.bg');
   if (bg.src !== scene.background) {
     bg.src = scene.background;
+  }
+  
+  // Change music if we're entering the candy shop (scene index 5)
+  if (sceneIndex === 5) {
+    dateMusic.pause();
+    candyMusic.currentTime = 0;
+    tryPlay(candyMusic);
   }
   
   // Show sprites
@@ -511,13 +841,70 @@ function onNextButtonClick() {
   } else {
     // All dialogues in this scene completed, move to next scene
     currentDateSceneIndex++;
+    
+    // Check if we've completed all questions
+    if (currentQuestionIndex >= 5) {
+      // Check score and proceed accordingly
+      if (candyShopScore < 3) {
+        showGameOver();
+        return;
+      } else {
+        // Proceed to next part (to be implemented later)
+        alert("Quiz passed! Would proceed to next part...");
+        return;
+      }
+    }
+    
     if (currentDateSceneIndex < firstDateScenes.length) {
       loadDateScene(currentDateSceneIndex);
     } else {
-      // All first date scenes completed, proceed to next part of the game
-      alert("First date scenes completed! Would proceed to next part...");
+      // All first date scenes completed
+      alert("All scenes completed!");
     }
   }
+}
+
+function showGameOver() {
+  // Change background to over.jpg
+  const bg = firstDateStage.querySelector('.bg');
+  bg.src = 'over.jpg';
+  
+  // Clear sprites and dialogue
+  spriteContainer.innerHTML = '';
+  dateDialogue.innerHTML = '';
+  
+  // Hide next button
+  nextButton.style.display = 'none';
+  
+  // Create game over text
+  const gameOverText = document.createElement('div');
+  gameOverText.className = 'game-over-text';
+  gameOverText.innerHTML = "Oh no.. I messed it up. 😔";
+  dateDialogue.appendChild(gameOverText);
+  
+  // Create restart button after a delay
+  setTimeout(() => {
+    const restartButton = document.createElement('button');
+    restartButton.id = 'restart-button';
+    restartButton.textContent = "Go back to the candy shop";
+    restartButton.addEventListener('click', restartCandyShop);
+    dateDialogue.appendChild(restartButton);
+  }, 2000);
+}
+
+function restartCandyShop() {
+  // Reset score and question index
+  candyShopScore = 0;
+  currentQuestionIndex = 0;
+  
+  // Go back to the beginning of the candy shop (scene index 5)
+  currentDateSceneIndex = 5;
+  
+  // Reload the scene
+  loadDateScene(currentDateSceneIndex);
+  
+  // Show next button again
+  nextButton.style.display = 'block';
 }
 
 function beginFirstDate() {
@@ -554,11 +941,12 @@ window.addEventListener('load', () => {
     new Image().src = scene.img;
   });
   
-  // Preload the date music
+  // Preload the date music and candy music
   dateMusic.load();
+  candyMusic.load();
   
   // Preload character sprites and dialogue boxes
-  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'd1.png', 'd2.png'];
+  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'p7.png', 'p8.png', 'p10.png', 'over.jpg', 'd1.png', 'd2.png'];
   spritesToPreload.forEach(sprite => {
     new Image().src = sprite;
   });
