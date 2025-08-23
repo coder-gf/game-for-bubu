@@ -253,8 +253,8 @@ const textContainer = document.getElementById('text-container');
 let candyShopScore = 0;
 let currentQuestionIndex = 0;
 
-// First date scenes with dialogues and sprites
-const firstDateScenes = [
+// Original first date scenes with dialogues and sprites (preserved for reset)
+const originalFirstDateScenes = [
   // Initial dialogues
   {
     background: 'bg1.jpg',
@@ -653,6 +653,9 @@ const firstDateScenes = [
   }
 ];
 
+// Working copy of first date scenes
+let currentFirstDateScenes = JSON.parse(JSON.stringify(originalFirstDateScenes));
+
 let currentDateSceneIndex = 0;
 let currentDialogueIndex = 0;
 let isDateTyping = false;
@@ -726,23 +729,22 @@ function handleChoice(choice) {
     showSprite({ image: choice.result.sprite, position: 'center' });
   }
   
- // Replace the current scene's dialogues with the result dialogues
-firstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
-
-// ✅ Prevent the choices from showing again for this scene
-delete firstDateScenes[currentDateSceneIndex].choices;   
-// or: firstDateScenes[currentDateSceneIndex].choices = null;
-
-// Reset dialogue index so the new dialogues start from the beginning
-currentDialogueIndex = 0;
-typeDateDialogue();
+  // Replace the current scene's dialogues with the result dialogues
+  currentFirstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
+  
+  // Mark that choices have been made in this scene
+  currentFirstDateScenes[currentDateSceneIndex].choicesMade = true;
+  
+  // Reset dialogue index so the new dialogues start from the beginning
+  currentDialogueIndex = 0;
+  typeDateDialogue();
   
   // Move to next question after this one is completed
   currentQuestionIndex++;
 }
 
 function loadDateScene(sceneIndex) {
-  const scene = firstDateScenes[sceneIndex];
+  const scene = currentFirstDateScenes[sceneIndex];
   
   // Update background if needed
   const bg = firstDateStage.querySelector('.bg');
@@ -770,11 +772,11 @@ function loadDateScene(sceneIndex) {
 }
 
 function typeDateDialogue() {
-  const scene = firstDateScenes[currentDateSceneIndex];
+  const scene = currentFirstDateScenes[currentDateSceneIndex];
   
   if (currentDialogueIndex >= scene.dialogues.length) {
-    // Check if this scene has choices
-    if (scene.choices && currentDialogueIndex === scene.dialogues.length) {
+    // Check if this scene has choices and they haven't been made yet
+    if (scene.choices && !scene.choicesMade && currentDialogueIndex === scene.dialogues.length) {
       showChoices(scene.choices);
       return;
     }
@@ -803,8 +805,8 @@ function typeDateDialogue() {
       isDateTyping = false;
       dateDialogue.innerHTML = dialogue.text;
       
-      // If this is the last dialogue and there are choices, show them
-      if (currentDialogueIndex === scene.dialogues.length - 1 && scene.choices) {
+      // If this is the last dialogue and there are choices that haven't been made, show them
+      if (currentDialogueIndex === scene.dialogues.length - 1 && scene.choices && !scene.choicesMade) {
         nextButton.disabled = true;
         setTimeout(() => {
           showChoices(scene.choices);
@@ -819,7 +821,7 @@ function typeDateDialogue() {
 }
 
 function onNextButtonClick() {
-  const scene = firstDateScenes[currentDateSceneIndex];
+  const scene = currentFirstDateScenes[currentDateSceneIndex];
   
   if (isDateTyping) {
     // If currently typing, complete immediately
@@ -827,8 +829,8 @@ function onNextButtonClick() {
     dateDialogue.innerHTML = scene.dialogues[currentDialogueIndex].text;
     isDateTyping = false;
     
-    // If this is the last dialogue and there are choices, show them
-    if (currentDialogueIndex === scene.dialogues.length - 1 && scene.choices) {
+    // If this is the last dialogue and there are choices that haven't been made, show them
+    if (currentDialogueIndex === scene.dialogues.length - 1 && scene.choices && !scene.choicesMade) {
       nextButton.disabled = true;
       setTimeout(() => {
         showChoices(scene.choices);
@@ -859,7 +861,7 @@ function onNextButtonClick() {
       }
     }
     
-    if (currentDateSceneIndex < firstDateScenes.length) {
+    if (currentDateSceneIndex < currentFirstDateScenes.length) {
       loadDateScene(currentDateSceneIndex);
     } else {
       // All first date scenes completed
@@ -901,6 +903,9 @@ function restartCandyShop() {
   candyShopScore = 0;
   currentQuestionIndex = 0;
   
+  // Reset the scenes to their original state
+  currentFirstDateScenes = JSON.parse(JSON.stringify(originalFirstDateScenes));
+  
   // Go back to the beginning of the candy shop (scene index 5)
   currentDateSceneIndex = 5;
   
@@ -915,6 +920,9 @@ function beginFirstDate() {
   // Stop epilogue music, start date music
   epilogueMusic.pause();
   dateMusic.currentTime = 0;
+  
+  // Reset the scenes to their original state
+  currentFirstDateScenes = JSON.parse(JSON.stringify(originalFirstDateScenes));
   
   // Hide epilogue, show first date stage
   epilogueStage.classList.remove('visible');
