@@ -249,10 +249,6 @@ const spriteContainer = document.getElementById('sprite-container');
 const dialogueBox = document.getElementById('dialogue-box');
 const textContainer = document.getElementById('text-container');
 
-// Quiz tracking variables
-let candyShopScore = 0;
-let currentQuestionIndex = 0;
-
 // Original first date scenes with dialogues and sprites (preserved for reset)
 const originalFirstDateScenes = [
   // Initial dialogues
@@ -441,7 +437,6 @@ const originalFirstDateScenes = [
       { 
         text: "Pepsi", 
         result: {
-          correct: true,
           sprite: null,
           dialogues: [
             { speaker: 'kc', text: "Hmmm...okay. This one was easy. I'm not impressed yet." },
@@ -452,7 +447,6 @@ const originalFirstDateScenes = [
       { 
         text: "Coke", 
         result: {
-          correct: false,
           sprite: null,
           dialogues: [
             { speaker: 'kc', text: "An okay choice. I don't hate coke either." },
@@ -478,7 +472,6 @@ const originalFirstDateScenes = [
       { 
         text: "Kit Kat", 
         result: {
-          correct: true,
           sprite: 'p5.png',
           dialogues: [
             { speaker: 'kc', text: "You're just like me, I think we'll get along well!" }
@@ -488,7 +481,6 @@ const originalFirstDateScenes = [
       { 
         text: "Snickers", 
         result: {
-          correct: false,
           sprite: 'p6.png',
           dialogues: [
             { speaker: 'kc', text: "Damn, really? I think we have different tastes then…" }
@@ -513,7 +505,6 @@ const originalFirstDateScenes = [
       { 
         text: "Chocolate", 
         result: {
-          correct: false,
           sprite: 'p4.png',
           dialogues: [
             { speaker: 'kc', text: "Really? Ugh..." },
@@ -524,7 +515,6 @@ const originalFirstDateScenes = [
       { 
         text: "Strawberry", 
         result: {
-          correct: true,
           sprite: 'p7.png',
           dialogues: [
             { speaker: 'kc', text: "Wow, you've really sparked my interest." }
@@ -563,7 +553,6 @@ const originalFirstDateScenes = [
       { 
         text: "Sweet", 
         result: {
-          correct: false,
           sprite: 'p6.png',
           dialogues: [
             { speaker: 'kc', text: "Hmm… Not quite the answer I was expecting. But I'll let this one slide." }
@@ -573,7 +562,6 @@ const originalFirstDateScenes = [
       { 
         text: "Savoury", 
         result: {
-          correct: true,
           sprite: 'p7.png',
           dialogues: [
             { speaker: 'kc', text: "Oh my god, the similarities between us are growing…" }
@@ -583,7 +571,6 @@ const originalFirstDateScenes = [
       { 
         text: "I'll be sweet to you all day, but I might get spicy at times…", 
         result: {
-          correct: true,
           sprite: 'p8.png',
           dialogues: [
             { speaker: 'kc', text: "Heyy! Don't make me blush so much in broad daylight!" }
@@ -619,7 +606,6 @@ const originalFirstDateScenes = [
       { 
         text: "Green", 
         result: {
-          correct: true,
           sprite: 'p5.png',
           dialogues: [
             { speaker: 'kc', text: "OMG! That's my favourite too! You really have amazing taste buds!" },
@@ -630,7 +616,6 @@ const originalFirstDateScenes = [
       { 
         text: "Orange", 
         result: {
-          correct: false,
           sprite: 'p6.png',
           dialogues: [
             { speaker: 'kc', text: "Really? Okay.." },
@@ -641,7 +626,6 @@ const originalFirstDateScenes = [
       { 
         text: "Hey, there's a pretty little park just outside, let's buy all your snacks and eat them there.", 
         result: {
-          correct: true,
           sprite: 'p7.png',
           dialogues: [
             { speaker: 'kc', text: "That sounds amazing, let's go!!" },
@@ -716,11 +700,6 @@ function handleChoice(choice) {
   const choiceButtons = document.querySelectorAll('.choice-button');
   choiceButtons.forEach(button => button.remove());
   
-  // Update score if choice is correct
-  if (choice.result.correct) {
-    candyShopScore++;
-  }
-  
   // Show the next button again
   nextButton.style.display = 'block';
   
@@ -738,9 +717,6 @@ function handleChoice(choice) {
   // Reset dialogue index so the new dialogues start from the beginning
   currentDialogueIndex = 0;
   typeDateDialogue();
-  
-  // Move to next question after this one is completed
-  currentQuestionIndex++;
 }
 
 function loadDateScene(sceneIndex) {
@@ -848,19 +824,6 @@ function onNextButtonClick() {
     // All dialogues in this scene completed, move to next scene
     currentDateSceneIndex++;
     
-    // Check if we've completed all questions
-    if (currentQuestionIndex >= 5) {
-      // Check score and proceed accordingly
-      if (candyShopScore < 3) {
-        showGameOver();
-        return;
-      } else {
-        // Proceed to next part (to be implemented later)
-        alert("Quiz passed! Would proceed to next part...");
-        return;
-      }
-    }
-    
     if (currentDateSceneIndex < currentFirstDateScenes.length) {
       loadDateScene(currentDateSceneIndex);
     } else {
@@ -868,52 +831,6 @@ function onNextButtonClick() {
       alert("All scenes completed!");
     }
   }
-}
-
-function showGameOver() {
-  // Change background to over.jpg
-  const bg = firstDateStage.querySelector('.bg');
-  bg.src = 'over.jpg';
-  
-  // Clear sprites and dialogue
-  spriteContainer.innerHTML = '';
-  dateDialogue.innerHTML = '';
-  
-  // Hide next button
-  nextButton.style.display = 'none';
-  
-  // Create game over text
-  const gameOverText = document.createElement('div');
-  gameOverText.className = 'game-over-text';
-  gameOverText.innerHTML = "Oh no.. I messed it up. 😔";
-  dateDialogue.appendChild(gameOverText);
-  
-  // Create restart button after a delay
-  setTimeout(() => {
-    const restartButton = document.createElement('button');
-    restartButton.id = 'restart-button';
-    restartButton.textContent = "Go back to the candy shop";
-    restartButton.addEventListener('click', restartCandyShop);
-    dateDialogue.appendChild(restartButton);
-  }, 2000);
-}
-
-function restartCandyShop() {
-  // Reset score and question index
-  candyShopScore = 0;
-  currentQuestionIndex = 0;
-  
-  // Reset the scenes to their original state
-  currentFirstDateScenes = JSON.parse(JSON.stringify(originalFirstDateScenes));
-  
-  // Go back to the beginning of the candy shop (scene index 5)
-  currentDateSceneIndex = 5;
-  
-  // Reload the scene
-  loadDateScene(currentDateSceneIndex);
-  
-  // Show next button again
-  nextButton.style.display = 'block';
 }
 
 function beginFirstDate() {
