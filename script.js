@@ -634,6 +634,190 @@ const originalFirstDateScenes = [
         }
       }
     ]
+  },
+  // NEW SCENES ADDED HERE - Park scene
+  {
+    background: 'bg3.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "We ended up coming to the nearby park." }
+    ],
+    onEnter: function() {
+      // Change music back to zelda.mp3
+      candyMusic.pause();
+      dateMusic.currentTime = 0;
+      tryPlay(dateMusic);
+    }
+  },
+  {
+    background: 'bg3.jpg',
+    sprites: [
+      {
+        image: 'p5.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kk', text: "She seems to be enjoying the scenery." },
+      { speaker: 'kc', text: "Kinshuk, you're really good at picking out date spots, I'm impressed." },
+      { speaker: 'kk', text: "Awwwww, I'm glad you enjoyed. I'll pick an even better spot next time." }
+    ]
+  },
+  {
+    background: 'bg3.jpg',
+    sprites: [
+      {
+        image: 'p8.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Next time..? Are you saying you want to keep going on more dates?" },
+      { speaker: 'kk', text: "Of course, I think we'll connect pretty well." },
+      { speaker: 'kc', text: "You can already tell?" },
+      { speaker: 'kk', text: "I'm kind of an expert, haha." }
+    ]
+  },
+  {
+    background: 'bg3.jpg',
+    sprites: [
+      {
+        image: 'p5.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "The cool breeze here is so peaceful. I could walk here for hours, if it wasn't for my shoe bite." }
+    ],
+    choices: [
+      { 
+        text: "Why would you walk for hours anyway?", 
+        result: {
+          sprite: 'p4.png',
+          dialogues: [
+            { speaker: 'kc', text: "I'll do what I want." }
+          ]
+        }
+      },
+      { 
+        text: "I would carry you around whenever you're tired.", 
+        result: {
+          sprite: 'p7.png',
+          dialogues: [
+            { speaker: 'kc', text: "You're ultra boyfriend material, do you know that?" },
+            { speaker: 'kk', text: "Awwwww, really?" },
+            { speaker: 'kc', text: "Definitely!" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    background: 'bg3.jpg',
+    sprites: [
+      {
+        image: 'p3.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Anyways, it looks like it's about to rain soon… we should head back." },
+      { speaker: 'kk', text: "(She looks cute when she's lost in thought.)" }
+    ],
+    choices: [
+      { 
+        text: "Walk her back to the station", 
+        result: {
+          sprite: 'p5.png',
+          dialogues: [
+            { speaker: 'kc', text: "I had a lot of fun today. I can't wait to see you again. I'll plan the date next time." }
+          ]
+        }
+      },
+      { 
+        text: "Hold her hand as you walk her back", 
+        result: {
+          sprite: 'p9.png',
+          dialogues: [
+            { speaker: 'kk', text: "(She started blushing visibly when I held her hand.)" },
+            { speaker: 'kc', text: "You know.. You're really interesting, and I can't wait to see you again." },
+            { speaker: 'kc', text: "I'll plan the date next time, okay?" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    background: 'bg3.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "Hehe, alright. Surprise me with your mystery date spot." }
+    ]
+  },
+  {
+    background: 'bg3.jpg',
+    sprites: [
+      {
+        image: 'p5.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Will do! I have just the perfect idea." }
+    ]
+  },
+  {
+    background: 'bg3.jpg',
+    sprites: [
+      {
+        image: 'p9.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "By the way.. I have something for you." },
+      { speaker: 'kk', text: "Hmm? What is it?" },
+      { speaker: 'kc', text: "Back at the shop, I picked out some candies for you as well. Here, take these." },
+      { speaker: 'kk', text: "(She hands me a cutely packed bag of candies.)" },
+      { speaker: 'kk', text: "Oh wow, thank you so much for these Kriti, these look yummy." }
+    ]
+  },
+  {
+    background: 'bg3.jpg',
+    sprites: [
+      {
+        image: 'p7.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "YES! They really are." }
+    ]
+  },
+  {
+    background: 'bg4.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(I walked her all the way to the station, and then she left with a hug.)" },
+      { speaker: 'kk', text: "(There's a warm and fuzzy feeling inside my stomach. I have a good feeling about this.)" }
+    ],
+    onEnter: function() {
+      // Fade out sprite
+      spriteContainer.innerHTML = '';
+    }
+  },
+  {
+    background: 'bg4.jpg',
+    sprites: [],
+    dialogues: [],
+    onEnter: function() {
+      // Hide dialogue box and show congratulations message
+      document.getElementById('dialogue-container').style.display = 'none';
+      const congrats = document.createElement('div');
+      congrats.id = 'congratulations';
+      congrats.textContent = "Congratulations! You have received a bag of candies! 🍬";
+      firstDateStage.appendChild(congrats);
+    }
   }
 ];
 
@@ -721,6 +905,11 @@ function handleChoice(choice) {
 
 function loadDateScene(sceneIndex) {
   const scene = currentFirstDateScenes[sceneIndex];
+  
+  // Call onEnter function if it exists
+  if (scene.onEnter && typeof scene.onEnter === 'function') {
+    scene.onEnter();
+  }
   
   // Update background if needed
   const bg = firstDateStage.querySelector('.bg');
@@ -875,7 +1064,7 @@ window.addEventListener('load', () => {
   candyMusic.load();
   
   // Preload character sprites and dialogue boxes
-  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'p7.png', 'p8.png', 'p10.png', 'd1.png', 'd2.png'];
+  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'p7.png', 'p8.png', 'p9.png', 'p10.png', 'd1.png', 'd2.png'];
   spritesToPreload.forEach(sprite => {
     new Image().src = sprite;
   });
