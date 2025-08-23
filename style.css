@@ -114,6 +114,20 @@ html, body {
   min-height: 3em;      /* reserve space so layout doesn't jump */
 }
 
+/* Congratulations message styling (same as epilogue subtitle) */
+#congratulations {
+  position: absolute;
+  inset-inline: 6%;
+  bottom: 3.5%;
+  text-align: center;
+  color: #ffcc00;
+  font-size: var(--subtitle-size);
+  line-height: 1.35;
+  text-shadow: var(--subtitle-shadow);
+  pointer-events: none;
+  min-height: 3em;
+}
+
 /* Image fades on scene change */
 .fade{
   opacity: 0; transition: opacity var(--fade-ms) ease;
