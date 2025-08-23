@@ -246,6 +246,7 @@ const dateDialogue = document.getElementById('date-dialogue');
 const nextButton = document.getElementById('next-button');
 const spriteContainer = document.getElementById('sprite-container');
 const dialogueBox = document.getElementById('dialogue-box');
+const textContainer = document.getElementById('text-container');
 
 // First date scenes with dialogues and sprites
 const firstDateScenes = [
@@ -302,6 +303,43 @@ const firstDateScenes = [
       { speaker: 'kk', text: "Yup, that's me. So how are you doing today Kriti? This place wasn't too far for you, right?" },
       { speaker: 'kc', text: "Nooooo not at all. And it's really pretty out here." }
     ]
+  },
+  // New scene with choice logic
+  {
+    background: 'bg1.jpg',
+    sprites: [
+      {
+        image: 'p4.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "so what's the plan? Where do we go first?" }
+    ],
+    choices: [
+      { 
+        text: "I'm not sure, do you have anything in mind?", 
+        result: {
+          sprite: 'p6.png',
+          dialogues: [
+            { speaker: 'kc', text: "oh, I don't know. I thought you'd have something planned out. Anyways, I saw a cute little candy shop nearby. How about going there first?" },
+            { speaker: 'kk', text: "(damn.... I should've planned something beforehand. She looks unimpressed.)" },
+            { speaker: 'kk', text: "yeah sure, lead the way." }
+          ]
+        }
+      },
+      { 
+        text: "There's a really cute candy store nearby, I thought you might be interested.", 
+        result: {
+          sprite: 'p5.png',
+          dialogues: [
+            { speaker: 'kc', text: "Oh really?? I love candy! How did you know?" },
+            { speaker: 'kk', text: "I just paid close attention during our conversation last night, hehe." },
+            { speaker: 'kc', text: "you know just what I like.💕" }
+          ]
+        }
+      }
+    ]
   }
 ];
 
@@ -309,6 +347,7 @@ let currentDateSceneIndex = 0;
 let currentDialogueIndex = 0;
 let isDateTyping = false;
 let dateTypingTimer = null;
+let currentChoices = null;
 
 function showSprite(spriteInfo) {
   spriteContainer.innerHTML = ''; // Clear previous sprites
@@ -322,7 +361,6 @@ function showSprite(spriteInfo) {
     if (spriteInfo.position === 'center') {
       sprite.classList.add('sprite-center');
     }
-    // Add more position options as needed
     
     spriteContainer.appendChild(sprite);
   }
@@ -336,6 +374,46 @@ function updateDialogueBox(speaker) {
   }
 }
 
+function showChoices(choices) {
+  // Hide the next button
+  nextButton.style.display = 'none';
+  
+  // Clear the dialogue area
+  dateDialogue.innerHTML = '';
+  
+  // Create choice buttons
+  choices.forEach((choice, index) => {
+    const choiceButton = document.createElement('div');
+    choiceButton.className = 'choice-button';
+    choiceButton.textContent = choice.text;
+    choiceButton.addEventListener('click', () => {
+      handleChoice(choice);
+    });
+    dateDialogue.appendChild(choiceButton);
+  });
+}
+
+function handleChoice(choice) {
+  // Remove choice buttons
+  const choiceButtons = document.querySelectorAll('.choice-button');
+  choiceButtons.forEach(button => button.remove());
+  
+  // Show the next button again
+  nextButton.style.display = 'block';
+  
+  // Update sprite
+  if (choice.result.sprite) {
+    showSprite({ image: choice.result.sprite, position: 'center' });
+  }
+  
+  // Replace the current scene's dialogues with the result dialogues
+  firstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
+  
+  // Reset dialogue index and start typing the result
+  currentDialogueIndex = 0;
+  typeDateDialogue();
+}
+
 function loadDateScene(sceneIndex) {
   const scene = firstDateScenes[sceneIndex];
   
@@ -347,7 +425,7 @@ function loadDateScene(sceneIndex) {
   
   // Show sprites
   if (scene.sprites && scene.sprites.length > 0) {
-    showSprite(scene.sprites[0]); // For now, just show the first sprite
+    showSprite(scene.sprites[0]);
   } else {
     spriteContainer.innerHTML = ''; // Clear sprites if none in this scene
   }
@@ -361,6 +439,12 @@ function typeDateDialogue() {
   const scene = firstDateScenes[currentDateSceneIndex];
   
   if (currentDialogueIndex >= scene.dialogues.length) {
+    // Check if this scene has choices
+    if (scene.choices && currentDialogueIndex === scene.dialogues.length) {
+      showChoices(scene.choices);
+      return;
+    }
+    
     // All dialogues in this scene completed
     nextButton.disabled = false;
     return;
@@ -383,8 +467,17 @@ function typeDateDialogue() {
       dateTypingTimer = setTimeout(typeNext, TYPE_MS);
     } else {
       isDateTyping = false;
-      nextButton.disabled = false;
       dateDialogue.innerHTML = dialogue.text;
+      
+      // If this is the last dialogue and there are choices, show them
+      if (currentDialogueIndex === scene.dialogues.length - 1 && scene.choices) {
+        nextButton.disabled = true;
+        setTimeout(() => {
+          showChoices(scene.choices);
+        }, 500);
+      } else {
+        nextButton.disabled = false;
+      }
     }
   }
 
@@ -399,7 +492,16 @@ function onNextButtonClick() {
     clearTimeout(dateTypingTimer);
     dateDialogue.innerHTML = scene.dialogues[currentDialogueIndex].text;
     isDateTyping = false;
-    nextButton.disabled = false;
+    
+    // If this is the last dialogue and there are choices, show them
+    if (currentDialogueIndex === scene.dialogues.length - 1 && scene.choices) {
+      nextButton.disabled = true;
+      setTimeout(() => {
+        showChoices(scene.choices);
+      }, 100);
+    } else {
+      nextButton.disabled = false;
+    }
     return;
   }
 
@@ -456,7 +558,7 @@ window.addEventListener('load', () => {
   dateMusic.load();
   
   // Preload character sprites and dialogue boxes
-  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'd1.png', 'd2.png'];
+  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'd1.png', 'd2.png'];
   spritesToPreload.forEach(sprite => {
     new Image().src = sprite;
   });
