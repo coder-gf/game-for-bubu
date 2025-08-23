@@ -263,6 +263,33 @@ html, body {
  50% { opacity: 0; }
 }
 
+/* Game over text and button */
+.game-over-text {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+#restart-button {
+  padding: 15px 30px;
+  font-size: 1.5rem;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 auto;
+  display: block;
+}
+
+#restart-button:hover {
+  background-color: #ff5252;
+  transform: scale(1.05);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #date-dialogue {
@@ -288,5 +315,14 @@ html, body {
     font-size: 1.2rem;
     padding: 10px 15px;
     margin: 6px 0;
+  }
+  
+  .game-over-text {
+    font-size: 1.6rem;
+  }
+  
+  #restart-button {
+    font-size: 1.2rem;
+    padding: 12px 24px;
   }
 }
