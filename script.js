@@ -726,12 +726,16 @@ function handleChoice(choice) {
     showSprite({ image: choice.result.sprite, position: 'center' });
   }
   
-  // Replace the current scene's dialogues with the result dialogues
-  firstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
-  
-  // Reset dialogue index and start typing the result
-  currentDialogueIndex = 0;
-  typeDateDialogue();
+ // Replace the current scene's dialogues with the result dialogues
+firstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
+
+// ✅ Prevent the choices from showing again for this scene
+delete firstDateScenes[currentDateSceneIndex].choices;   
+// or: firstDateScenes[currentDateSceneIndex].choices = null;
+
+// Reset dialogue index so the new dialogues start from the beginning
+currentDialogueIndex = 0;
+typeDateDialogue();
   
   // Move to next question after this one is completed
   currentQuestionIndex++;
