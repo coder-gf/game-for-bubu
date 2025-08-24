@@ -928,6 +928,13 @@ function loadDateScene(sceneIndex) {
     candyMusic.currentTime = 0;
     tryPlay(candyMusic);
   }
+
+// ✅ Change back when entering the park (scene index 20)
+else if (sceneIndex === 20) {
+  candyMusic.pause();
+  dateMusic.currentTime = 0;
+  tryPlay(dateMusic);
+}
   
   // Show sprites
   if (scene.sprites && scene.sprites.length > 0) {
