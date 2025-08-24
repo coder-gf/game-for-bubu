@@ -749,7 +749,12 @@ const originalFirstDateScenes = [
   },
   {
     background: 'bg3.jpg',
-    sprites: [],
+    sprites: [
+            {
+        image: 'p9.png',
+        position: 'center'
+      }
+    ],
     dialogues: [
       { speaker: 'kk', text: "Hehe, alright. Surprise me with your mystery date spot." }
     ]
