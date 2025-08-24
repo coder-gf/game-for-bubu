@@ -433,7 +433,7 @@ const originalFirstDateScenes = [
     dialogues: [
       { speaker: 'kc', text: "Which of these do you like better, Pepsi or coke?" }
     ],
-    choices: [
+    Choices: [
       { 
         text: "Pepsi", 
         result: {
@@ -468,7 +468,7 @@ const originalFirstDateScenes = [
     dialogues: [
       { speaker: 'kc', text: "So, Kit Kat or snickers?" }
     ],
-    choices: [
+    Choices: [
       { 
         text: "Kit Kat", 
         result: {
@@ -501,7 +501,7 @@ const originalFirstDateScenes = [
     dialogues: [
       { speaker: 'kc', text: "Next question, do you prefer chocolate milkshake or strawberry milkshake?" }
     ],
-    choices: [
+    Choices: [
       { 
         text: "Chocolate", 
         result: {
@@ -549,7 +549,7 @@ const originalFirstDateScenes = [
     dialogues: [
       { speaker: 'kc', text: "Okay so, Are you a sweet or savoury type of guy?" }
     ],
-    choices: [
+    Choices: [
       { 
         text: "Sweet", 
         result: {
@@ -602,7 +602,7 @@ const originalFirstDateScenes = [
       }
     ],
     dialogues: [],
-    choices: [
+    Choices: [
       { 
         text: "Green", 
         result: {
@@ -689,7 +689,7 @@ const originalFirstDateScenes = [
     dialogues: [
       { speaker: 'kc', text: "The cool breeze here is so peaceful. I could walk here for hours, if it wasn't for my shoe bite." }
     ],
-    choices: [
+    Choices: [
       { 
         text: "Why would you walk for hours anyway?", 
         result: {
@@ -705,7 +705,7 @@ const originalFirstDateScenes = [
           sprite: 'p7.png',
           dialogues: [
             { speaker: 'kc', text: "You're ultra boyfriend material, do you know that?" },
-            { speaker: 'kk', text: "Awwwww, really?" },
+            { speaker: 'kk', text: "Awwww, really?" },
             { speaker: 'kc', text: "Definitely!" }
           ]
         }
@@ -724,7 +724,7 @@ const originalFirstDateScenes = [
       { speaker: 'kc', text: "Anyways, it looks like it's about to rain soon… we should head back." },
       { speaker: 'kk', text: "(She looks cute when she's lost in thought.)" }
     ],
-    choices: [
+    Choices: [
       { 
         text: "Walk her back to the station", 
         result: {
