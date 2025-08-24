@@ -706,7 +706,7 @@ const originalFirstDateScenes = [
           sprite: 'p7.png',
           dialogues: [
             { speaker: 'kc', text: "You're ultra boyfriend material, do you know that?" },
-            { speaker: 'kk', text: "Awwwww, really?" },
+            { speaker: 'kk', text: "Awwww, really?" },
             { speaker: 'kc', text: "Definitely!" }
           ]
         }
@@ -822,17 +822,7 @@ const libraryDateScenes = [
     dialogues: [
       { speaker: 'kk', text: "(We're meeting for our second date today.)" },
       { speaker: 'kk', text: "(She's planned this date at this beautiful library. I should find her.)" }
-    ],
-    onEnter: function() {
-      // Show dialogue container
-      document.getElementById('dialogue-container').style.display = 'block';
-      
-      // Change music to library.mp3
-      dateMusic.pause();
-      candyMusic.pause();
-      libraryMusic.currentTime = 0;
-      tryPlay(libraryMusic);
-    }
+    ]
   },
   {
     background: 'bg5.jpg',
@@ -1422,14 +1412,6 @@ else if (sceneIndex === 20) {
   tryPlay(dateMusic);
 }
 
-// Change music for library date scenes
-if (currentDateType === 'library') {
-  dateMusic.pause();
-  candyMusic.pause();
-  libraryMusic.currentTime = 0;
-  tryPlay(libraryMusic);
-}
-
   // Show sprites
   if (scene.sprites && scene.sprites.length > 0) {
     showSprite(scene.sprites[0]);
@@ -1565,6 +1547,12 @@ function beginLibraryDate() {
   
   // Reset the scenes to the library date scenes
   currentFirstDateScenes = JSON.parse(JSON.stringify(libraryDateScenes));
+  
+  // Stop any current music and start library music
+  dateMusic.pause();
+  candyMusic.pause();
+  libraryMusic.currentTime = 0;
+  tryPlay(libraryMusic);
   
   // Start from the first scene
   currentDateSceneIndex = 0;
