@@ -1421,7 +1421,15 @@ else if (sceneIndex === 20) {
   dateMusic.currentTime = 0;
   tryPlay(dateMusic);
 }
-  
+
+// Change music for library date scenes
+if (currentDateType === 'library') {
+  dateMusic.pause();
+  candyMusic.pause();
+  libraryMusic.currentTime = 0;
+  tryPlay(libraryMusic);
+}
+
   // Show sprites
   if (scene.sprites && scene.sprites.length > 0) {
     showSprite(scene.sprites[0]);
