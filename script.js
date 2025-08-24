@@ -4,6 +4,9 @@ const epilogueMusic = document.getElementById('epilogue-music');
 const dateMusic = document.getElementById('date-music');
 const candyMusic = document.getElementById('candy-music');
 const libraryMusic = document.getElementById('library-music');
+const roadMusic = document.getElementById('road-music');
+const mallMusic = document.getElementById('mall-music');
+const roomMusic = document.getElementById('room-music');
 
 /* Best effort: try to autoplay; if the browser blocks it, begin on first user gesture */
 function tryPlay(audio){
@@ -1318,6 +1321,394 @@ const libraryDateScenes = [
       // Fade out sprite
       spriteContainer.innerHTML = '';
     }
+  },
+  // Hotel Scene - NEW CONTENT STARTS HERE
+  {
+    background: 'bg6.jpg',
+    sprites: [],
+    dialogues: [],
+    onEnter: function() {
+      // Change music to road.mp3
+      libraryMusic.pause();
+      roadMusic.currentTime = 0;
+      tryPlay(roadMusic);
+      // Hide dialogue box for this transition
+      document.getElementById('dialogue-container').style.display = 'none';
+    }
+  },
+  {
+    background: 'bg6.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(It's our third date today. I'm planning to ask her to be my girlfriend today.. I really hope it goes well.)" },
+      { speaker: 'kk', text: "(We're meeting outside a restaurant that I picked out for us.)" },
+      { speaker: 'kk', text: "(I already see her approaching excitedly towards me.)" }
+    ],
+    onEnter: function() {
+      // Show dialogue box again
+      document.getElementById('dialogue-container').style.display = 'flex';
+    }
+  },
+  {
+    background: 'bg6.jpg',
+    sprites: [
+      {
+        image: 'p30.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Hiiiii.. Did I make you wait a lot?" },
+      { speaker: 'kk', text: "Oh not at all, I just got here." },
+      { speaker: 'kk', text: "You look pretty today, it's the first time I'm seeing you in a dress." },
+      { speaker: 'kc', text: "Hehe, well, you know I like to dress for the occasion." }
+    ]
+  },
+  {
+    background: 'bg6.jpg',
+    sprites: [
+      {
+        image: 'p31.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kk', text: "(As we were busy talking, a speeding car passes by us all of a sudden, and splashes dirt all over her dress.)" },
+      { speaker: 'kc', text: "Oh my god!" },
+      { speaker: 'kk', text: "She looks at me all embarrassed, as her dress flies up due to the speeding car.)" },
+      { speaker: 'kc', text: "Hey! Stop looking!" },
+      { speaker: 'kk', text: "Y-yeah.. Sorry." }
+    ]
+  },
+  {
+    background: 'bg6.jpg',
+    sprites: [
+      {
+        image: 'p32.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Kinshuk.. My dress is all dirty now. I can't go to the restaurant this way." },
+      { speaker: 'kk', text: "Oh god, I should've seen that car coming." },
+      { speaker: 'kk', text: "But it's okay, Kriti. Let's go buy you another dress, okay?" },
+      { speaker: 'kc', text: "Okay.. Let's do that." }
+    ]
+  },
+  {
+    background: 'bg7.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(We came to the mall and she picked out a few dresses.)" },
+      { speaker: 'kk', text: "(She just asked me to follow her to the fitting room, so I'm heading there.)" }
+    ],
+    onEnter: function() {
+      // Change music to mall.mp3
+      roadMusic.pause();
+      mallMusic.currentTime = 0;
+      tryPlay(mallMusic);
+    }
+  },
+  {
+    background: 'bg8.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "Kriti, are you here?" }
+    ]
+  },
+  {
+    background: 'bg8.jpg',
+    sprites: [
+      {
+        image: 'p33.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kk', text: "(She comes out of the fitting room, looking slightly embarrassed.)" },
+      { speaker: 'kc', text: "Hey.. This one is not appropriate for the place, right?" },
+      { speaker: 'kc', text: "It's too skimpy.. I don't know if I can handle it." },
+      { speaker: 'kk', text: "(I'm kind of speechless but I still speak up.)" },
+      { speaker: 'kk', text: "I think it's beautiful. But if you don't feel comfortable, you should try something else." },
+      { speaker: 'kc', text: "You're right. Let me show you the other one." }
+    ]
+  },
+  {
+    background: 'bg8.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(Wow.. didn't expect to see her like that.)" }
+    ]
+  },
+  {
+    background: 'bg8.jpg',
+    sprites: [
+      {
+        image: 'p34.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "What about this one?" },
+      { speaker: 'kk', text: "Ooooh.. It looks really cute on you, I like it." },
+      { speaker: 'kc', text: "I like it too, but there's still one more, so let me just try that one as well." },
+      { speaker: 'kk', text: "Yes please, show me all of them." }
+    ]
+  },
+  {
+    background: 'bg8.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(I'm kind of enjoying this little haul she's giving me, hehe.)" }
+    ]
+  },
+  {
+    background: 'bg8.jpg',
+    sprites: [
+      {
+        image: 'p35.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "What do you think about this one..?" },
+      { speaker: 'kk', text: "Wow.. This one is made just for you. Let's get this one." },
+      { speaker: 'kc', text: "Awwwww.. Are you sure?" },
+      { speaker: 'kk', text: "Yes! It's decided." },
+      { speaker: 'kc', text: "Okay.." },
+      { speaker: 'kk', text: "Is something wrong? You seem like you want to say something." },
+      { speaker: 'kc', text: "it's just that.. I'm still feeling icky from all the dirt that fell on me." },
+      { speaker: 'kc', text: "I don't think I'll feel better without a shower." },
+      { speaker: 'kk', text: "Awwwww, I understand, Kriti. Do you want me to drop you home?" },
+      { speaker: 'kc', text: "I don't wanna cut our date short. I was really excited to spend time with you today." },
+      { speaker: 'kc', text: "How about we get a room nearby so I can shower quickly? Then we can order dinner there." },
+      { speaker: 'kk', text: "(Wow, I'm kind of glad she suggested this..)" },
+      { speaker: 'kk', text: "Sure, Kriti. We can definitely do that." },
+      { speaker: 'kk', text: "Let's buy this dress, and I'll drive us to a hotel." },
+      { speaker: 'kc', text: "Thank you Kinshuk, you're a sweet guy." }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(We've checked into this really pretty hotel, and just came to our room.)" }
+    ],
+    onEnter: function() {
+      // Change music to room.mp3
+      mallMusic.pause();
+      roomMusic.currentTime = 0;
+      tryPlay(roomMusic);
+    }
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [
+      {
+        image: 'p35.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Hey, the water's warm, so I'll go take the shower now." },
+      { speaker: 'kk', text: "Sure, I'll wait right here." },
+      { speaker: 'kk', text: "(I sit down at the edge of the bed, and she starts undressing for the shower.)" }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [
+      {
+        image: 'p36.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "You don't mind me getting ready for the shower here, do you?" },
+      { speaker: 'kk', text: "Oh n-no.. I don't mind anything you do." },
+      { speaker: 'kc', text: "Awwwww.. You're too sweet, Kinshuk." }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [
+      {
+        image: 'p37.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kk', text: "(She looks at me shyly as she takes her dress off.)" },
+      { speaker: 'kc', text: "Are you going to keep looking at me?" },
+      { speaker: 'kk', text: "Don't you want me to?" },
+      { speaker: 'kk', text: "(She doesn't answer, and I take her silence as a yes.)" },
+      { speaker: 'kk', text: "Go on, Kriti." }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [
+      {
+        image: 'p38.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Hey.. I need to take off my underwear now, so.. Can you look away?" },
+      { speaker: 'kk', text: "Awwwww, you want to take my pretty view away?" },
+      { speaker: 'kc', text: "Come on.. I'm really embarrassed." },
+      { speaker: 'kk', text: "You don't need to be embarrassed. I think you look great." },
+      { speaker: 'kk', text: "With and without your dress." },
+      { speaker: 'kc', text: "Shush! Just look away." },
+      { speaker: 'kk', text: "Haha, okay, I'm looking away." }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(She's kinda shy right now, but she'll open up to me.)" }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [
+      {
+        image: 'p39.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Okay, I'm going in there." },
+      { speaker: 'kc', text: "You won't get bored while I'm in there, right?" },
+      { speaker: 'kk', text: "Not at all. I'll just pass my time by thinking of you." },
+      { speaker: 'kc', text: "Oh shush! You keep making me blush." },
+      { speaker: 'kc', text: "Anyways, I'll go in now." },
+      { speaker: 'kk', text: "Yes! And take your time." }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(I can hear her singing in the shower. It's kind of funny and out of tune.)" },
+      { speaker: 'kk', text: "(It's been a while now, she must be almost done.)" },
+      { speaker: 'kc', text: "Kinshuk!!" },
+      { speaker: 'kk', text: "(She's calling for me from inside the bathroom, I should go check on her.)" }
+    ]
+  },
+  {
+    background: 'bg10.jpg',
+    sprites: [
+      {
+        image: 'p40.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kk', text: "Is everything okay, Kriti?" },
+      { speaker: 'kk', text: "(Damn.. she's wearing nothing but a towel.)" },
+      { speaker: 'kc', text: "I don't want to wear the dress right now, it's a little uncomfortable for laying in bed." },
+      { speaker: 'kc', text: "Can you lend me your T-shirt?" },
+      { speaker: 'kk', text: "Oh of course, here you go." },
+      { speaker: 'kk', text: "(She stares at me as I take my T-shirt off to give to her.)" },
+      { speaker: 'kc', text: "Thanks.. You can wait in the room now, I'll just come on out." },
+      { speaker: 'kk', text: "Sure thing." }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(I came back to the room to wait for her.)" }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [
+      {
+        image: 'p41.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "I put your T-shirt on. It's really soft and comfy." },
+      { speaker: 'kk', text: "(It matches her underwear.)" },
+      { speaker: 'kk', text: "And it looks super cute on you." },
+      { speaker: 'kc', text: "Really? That's sweet." },
+      { speaker: 'kc', text: "I love that it smells just like you, it gives me a fuzzy feeling." },
+      { speaker: 'kk', text: "I'm glad you're comfy in it." }
+    ]
+  },
+  {
+    background: 'bg9.jpg',
+    sprites: [
+      {
+        image: 'p42.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "By the way.. I have a gift for you." },
+      { speaker: 'kk', text: "Another gift!?" },
+      { speaker: 'kc', text: "Well, you've been really sweet to me. And I feel like I've never met anyone who is as funny, interesting, and thoughtful as you." },
+      { speaker: 'kk', text: "You don't have to give me anything, Kriti." },
+      { speaker: 'kc', text: "I just really wanted to. It would make me really happy if you accept the gift, and even happier if you like it." },
+      { speaker: 'kk', text: "Awwwww.." },
+      { speaker: 'kk', text: "(She hands me a small gift wrapped box.)" },
+      { speaker: 'kc', text: "Don't open it right now, okay?" },
+      { speaker: 'kk', text: "Haha, yes. I knew you'd say that." },
+      { speaker: 'kk', text: "(Suddenly, I have this urge to just grab her and throw her onto the bed, so I do just that.)" }
+    ]
+  },
+  {
+    background: 'bg11.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kc', text: "Hey! What are you doing?" },
+      { speaker: 'kk', text: "I'm sorry, you were looking too cute. I just had to." },
+      { speaker: 'kc', text: "You caught me off guard.." },
+      { speaker: 'kk', text: "Can you blame me? You standing there in my T-shirt.. it's too cute to handle." },
+      { speaker: 'kc', text: "Mmmmm.. My face will turn permanently red from blushing, you know." }
+    ]
+  },
+  {
+    background: 'bg12.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kc', text: "Hey.." },
+      { speaker: 'kk', text: "Shush. Don't say anything." },
+      { speaker: 'kk', text: "(I get on top of her and stare at her looking up at me.)" },
+      { speaker: 'kk', text: "(In this moment, I know that I love her.)" },
+      { speaker: 'kc', text: "Are you okay? You're acting.. Different." },
+      { speaker: 'kk', text: "I'm not just okay. I'm better than ever." },
+      { speaker: 'kc', text: "Oh yeah?" }
+    ]
+  },
+  {
+    background: 'bg13.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(I close the distance between us and bring my face close to hers.)" },
+      { speaker: 'kk', text: "(I need to say it right now.)" },
+      { speaker: 'kk', text: "I love you, Kriti." },
+      { speaker: 'kk', text: "Will you be my girlfriend?" },
+      { speaker: 'kc', text: "Oh my god.." },
+      { speaker: 'kk', text: "(She looks at me completely surprised, but her expression slowly softens.)" },
+      { speaker: 'kc', text: "I love you too, Kinshuk. And yes, a thousand times yes." },
+      { speaker: 'kk', text: "(We both smile and kiss each other. It's our first kiss, and it feels like magic.)" }
+    ]
+  },
+  {
+    background: 'bg14.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(After we run out of breath from kissing each other, I lay behind her and spoon her.)" },
+      { speaker: 'kc', text: "How do you know I love being spooned?" },
+      { speaker: 'kk', text: "I know you. And I'll do everything that makes you happy." },
+      { speaker: 'kc', text: "You're really the best, you know.." },
+      { speaker: 'kk', text: "We are the best, together." }
+    ]
   }
 ];
 
@@ -1631,9 +2022,12 @@ window.addEventListener('load', () => {
   dateMusic.load();
   candyMusic.load();
   libraryMusic.load();
+  roadMusic.load();
+  mallMusic.load();
+  roomMusic.load();
   
   // Preload character sprites and dialogue boxes
-  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'p7.png', 'p8.png', 'p9.png', 'p10.png', 'p11.png', 'p12.png', 'p13.png', 'p20.png', 'p21.png', 'p22.png', 'p23.png', 'd1.png', 'd2.png'];
+  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'p7.png', 'p8.png', 'p9.png', 'p10.png', 'p11.png', 'p12.png', 'p13.png', 'p20.png', 'p21.png', 'p22.png', 'p23.png', 'p30.png', 'p31.png', 'p32.png', 'p33.png', 'p34.png', 'p35.png', 'p36.png', 'p37.png', 'p38.png', 'p39.png', 'p40.png', 'p41.png', 'p42.png', 'd1.png', 'd2.png'];
   spritesToPreload.forEach(sprite => {
     new Image().src = sprite;
   });
