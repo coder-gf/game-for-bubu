@@ -1528,18 +1528,20 @@ function onNextButtonClick() {
   if (currentDialogueIndex < scene.dialogues.length) {
     typeDateDialogue();
   } else {
-    // All dialogues in this scene completed, move to next scene
-    currentDateSceneIndex++;
+    // All dialogues in this scene completed
     
-    // Check if we need to retry a question (for library quiz)
+    // Check if we need to retry a question
     if (retryQuestionIndex !== -1 && currentDateType === 'library') {
+      // Reset the scene to show the question again
+      currentFirstDateScenes[retryQuestionIndex] = JSON.parse(JSON.stringify(libraryDateScenes[retryQuestionIndex]));
       currentDateSceneIndex = retryQuestionIndex;
       retryQuestionIndex = -1;
-      
-      // Reset the scene to show the question again
-      currentFirstDateScenes[currentDateSceneIndex].choicesMade = false;
-      currentFirstDateScenes[currentDateSceneIndex].dialogues = libraryDateScenes[currentDateSceneIndex].dialogues;
+      loadDateScene(currentDateSceneIndex);
+      return;
     }
+    
+    // No retry needed, move to next scene
+    currentDateSceneIndex++;
     
     if (currentDateSceneIndex < currentFirstDateScenes.length) {
       loadDateScene(currentDateSceneIndex);
