@@ -943,7 +943,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Wow.. I didn't expect you to actually know this.." },
             { speaker: 'kk', text: "(She's all starry eyed, it's so easy to amuse her.)" }
           ]
-        }
+        },
+        correct: true
       },
       { 
         text: "Brazil", 
@@ -998,7 +999,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "That's right! Kinshuk, how did you know this?" },
             { speaker: 'kk', text: "Haha, I know a lot of things. You'll get used to it slowly." }
           ]
-        }
+        },
+        correct: true
       },
       { 
         text: "Almaty", 
@@ -1078,7 +1080,8 @@ const libraryDateScenes = [
             { speaker: 'kk', text: "Stick with me, babe." },
             { speaker: 'kc', text: "Haha, come on, you're so silly." }
           ]
-        }
+        },
+        correct: true
       },
       { 
         text: "Philippines", 
@@ -1123,7 +1126,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "OMG, it's correct! You know your stuff, Mr Gold 1." },
             { speaker: 'kk', text: "Hey, stop teasing me about my Geoguessr hobby!" }
           ]
-        }
+        },
+        correct: true
       },
       { 
         text: "Mekong", 
@@ -1182,7 +1186,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "…" },
             { speaker: 'kk', text: "(She's just staring at me without saying anything. It's making me blush a little.)" }
           ]
-        }
+        },
+        correct: true
       },
       { 
         text: "Lake Baikal", 
@@ -1310,6 +1315,7 @@ let isDateTyping = false;
 let dateTypingTimer = null;
 let currentChoices = null;
 let currentDateType = 'first'; // Track which date type we're in
+let retryQuestionIndex = -1; // Track which question needs to be retried
 
 function showSprite(spriteInfo) {
   spriteContainer.innerHTML = ''; // Clear previous sprites
@@ -1373,6 +1379,30 @@ function handleChoice(choice) {
     showSprite({ image: choice.result.sprite, position: 'center' });
   }
   
+  // For library date quiz questions, check if answer is correct
+  if (currentDateType === 'library' && 
+      currentDateSceneIndex >= 6 && 
+      currentDateSceneIndex <= 10 &&
+      choice.correct !== undefined) {
+    
+    if (!choice.correct) {
+      // Wrong answer - store the current scene index to retry
+      retryQuestionIndex = currentDateSceneIndex;
+      
+      // Replace the current scene's dialogues with the result dialogues
+      currentFirstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
+      
+      // Mark that choices have been made in this scene
+      currentFirstDateScenes[currentDateSceneIndex].choicesMade = true;
+      
+      // Reset dialogue index so the new dialogues start from the beginning
+      currentDialogueIndex = 0;
+      typeDateDialogue();
+      return;
+    }
+  }
+  
+  // For correct answers or non-quiz choices, proceed normally
   // Replace the current scene's dialogues with the result dialogues
   currentFirstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
   
@@ -1501,6 +1531,16 @@ function onNextButtonClick() {
     // All dialogues in this scene completed, move to next scene
     currentDateSceneIndex++;
     
+    // Check if we need to retry a question (for library quiz)
+    if (retryQuestionIndex !== -1 && currentDateType === 'library') {
+      currentDateSceneIndex = retryQuestionIndex;
+      retryQuestionIndex = -1;
+      
+      // Reset the scene to show the question again
+      currentFirstDateScenes[currentDateSceneIndex].choicesMade = false;
+      currentFirstDateScenes[currentDateSceneIndex].dialogues = libraryDateScenes[currentDateSceneIndex].dialogues;
+    }
+    
     if (currentDateSceneIndex < currentFirstDateScenes.length) {
       loadDateScene(currentDateSceneIndex);
     } else {
@@ -1556,6 +1596,7 @@ function beginLibraryDate() {
   
   // Start from the first scene
   currentDateSceneIndex = 0;
+  retryQuestionIndex = -1; // Reset retry index
   loadDateScene(currentDateSceneIndex);
 }
 
