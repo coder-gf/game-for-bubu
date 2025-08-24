@@ -1029,7 +1029,7 @@ function onNextButtonClick() {
       loadDateScene(currentDateSceneIndex);
     } else {
       // All first date scenes completed
-      alert("All scenes completed!");
+     // alert("All scenes completed!");
     }
   }
 }
