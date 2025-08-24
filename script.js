@@ -813,25 +813,18 @@ const originalFirstDateScenes = [
     }
   },
   {
-    background: 'bg4.jpg',
-    sprites: [],
-    dialogues: [],
-    onEnter: function() {
-      // Hide dialogue box and show congratulations message
-      document.getElementById('dialogue-container').style.display = 'none';
-      const congrats = document.createElement('div');
-      congrats.id = 'congratulations';
-      congrats.textContent = "Congratulations! You have received a bag of candies! 🍬";
-      firstDateStage.appendChild(congrats);
-      
-      // After a delay, show the alert to move to the next date
-      setTimeout(() => {
-        if (confirm("Move to the next date?")) {
-          beginLibraryDate();
-        }
-      }, 2000);
-    }
+  background: 'bg4.jpg',
+  sprites: [],
+  dialogues: [],
+  onEnter: function() {
+    // Remove the congratulations creation code and directly show the alert
+    setTimeout(() => {
+      if (confirm("Move to the next date?")) {
+        beginLibraryDate();
+      }
+    }, 500);
   }
+}
 ];
 
 // Library Date Scenes
