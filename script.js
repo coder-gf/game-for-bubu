@@ -919,7 +919,7 @@ const libraryDateScenes = [
       { speaker: 'kk', text: "Haha, bring it on. I'm ever ready." },
       { speaker: 'kc', text: "Damn. I thought I'd catch you off guard, but you're really confident." },
       { speaker: 'kc', text: "Okay, let's see here.." },
-      { speaker: 'kk', text: "(She shuffles through the pages.)" }
+      { speaker: 'kc', text: "(She shuffles through the pages.)" }
     ]
   },
   // Question 1
@@ -954,7 +954,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Haha, seems that even Gold 1 can fumble sometimes." },
             { speaker: 'kk', text: "(Oh god.. This was embarrassing.)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Russia", 
@@ -964,7 +965,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Haha, seems that even Gold 1 can fumble sometimes." },
             { speaker: 'kk', text: "(Oh god.. This was embarrassing.)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Democratic Republic of the Congo", 
@@ -974,7 +976,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Haha, seems that even Gold 1 can fumble sometimes." },
             { speaker: 'kk', text: "(Oh god.. This was embarrassing.)" }
           ]
-        }
+        },
+        correct: false
       }
     ]
   },
@@ -1010,7 +1013,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "That's wrong.. You'll have to spend more time studying, haha." },
             { speaker: 'kk', text: "(Shoot.. How did I get this wrong?)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Bishkek", 
@@ -1020,7 +1024,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "That's wrong.. You'll have to spend more time studying, haha." },
             { speaker: 'kk', text: "(Shoot.. How did I get this wrong?)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Tashkent", 
@@ -1030,7 +1035,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "That's wrong.. You'll have to spend more time studying, haha." },
             { speaker: 'kk', text: "(Shoot.. How did I get this wrong?)" }
           ]
-        }
+        },
+        correct: false
       }
     ]
   },
@@ -1057,7 +1063,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Nuh-uh. I expected more from you, you know." },
             { speaker: 'kk', text: "(Noooooo.. I should've known this one.)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Indonesia", 
@@ -1067,7 +1074,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Nuh-uh. I expected more from you, you know." },
             { speaker: 'kk', text: "(Noooooo.. I should've known this one.)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Sweden", 
@@ -1091,7 +1099,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Nuh-uh. I expected more from you, you know." },
             { speaker: 'kk', text: "(Noooooo.. I should've known this one.)" }
           ]
-        }
+        },
+        correct: false
       }
     ]
   },
@@ -1116,7 +1125,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Umm, no. Tell me, is this atlas too tricky for Gold 1 rankers?" },
             { speaker: 'kk', text: "(She's mocking me now. I need to think harder!)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Danube", 
@@ -1137,7 +1147,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Umm, no. Tell me, is this atlas too tricky for Gold 1 rankers?" },
             { speaker: 'kk', text: "(She's mocking me now. I need to think harder!)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Amazon", 
@@ -1147,7 +1158,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Umm, no. Tell me, is this atlas too tricky for Gold 1 rankers?" },
             { speaker: 'kk', text: "(She's mocking me now. I need to think harder!)" }
           ]
-        }
+        },
+        correct: false
       }
     ]
   },
@@ -1174,7 +1186,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Haha, it's fine, I'm just kidding! I don't know the answers to any of these myself." },
             { speaker: 'kk', text: "(Grrrrrrr..)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Dead Sea", 
@@ -1199,7 +1212,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Haha, it's fine, I'm just kidding! I don't know the answers to any of these myself." },
             { speaker: 'kk', text: "(Grrrrrrr..)" }
           ]
-        }
+        },
+        correct: false
       },
       { 
         text: "Great Salt Lake", 
@@ -1211,7 +1225,8 @@ const libraryDateScenes = [
             { speaker: 'kc', text: "Haha, it's fine, I'm just kidding! I don't know the answers to any of these myself." },
             { speaker: 'kk', text: "(Grrrrrrr..)" }
           ]
-        }
+        },
+        correct: false
       }
     ]
   },
@@ -1383,23 +1398,21 @@ function handleChoice(choice) {
   if (currentDateType === 'library' && 
       currentDateSceneIndex >= 6 && 
       currentDateSceneIndex <= 10 &&
-      choice.correct !== undefined) {
+      choice.correct === false) {
     
-    if (choice.correct !== true) {
-      // Wrong answer - store the current scene index to retry
-      retryQuestionIndex = currentDateSceneIndex;
-      
-      // Replace the current scene's dialogues with the result dialogues
-      currentFirstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
-      
-      // Mark that choices have been made in this scene
-      currentFirstDateScenes[currentDateSceneIndex].choicesMade = true;
-      
-      // Reset dialogue index so the new dialogues start from the beginning
-      currentDialogueIndex = 0;
-      typeDateDialogue();
-      return;
-    }
+    // Wrong answer - store the current scene index to retry
+    retryQuestionIndex = currentDateSceneIndex;
+    
+    // Replace the current scene's dialogues with the result dialogues
+    currentFirstDateScenes[currentDateSceneIndex].dialogues = choice.result.dialogues;
+    
+    // Mark that choices have been made in this scene
+    currentFirstDateScenes[currentDateSceneIndex].choicesMade = true;
+    
+    // Reset dialogue index so the new dialogues start from the beginning
+    currentDialogueIndex = 0;
+    typeDateDialogue();
+    return;
   }
   
   // For correct answers or non-quiz choices, proceed normally
