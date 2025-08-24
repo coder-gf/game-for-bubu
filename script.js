@@ -1385,7 +1385,7 @@ function handleChoice(choice) {
       currentDateSceneIndex <= 10 &&
       choice.correct !== undefined) {
     
-    if (!choice.correct) {
+    if (choice.correct !== true) {
       // Wrong answer - store the current scene index to retry
       retryQuestionIndex = currentDateSceneIndex;
       
