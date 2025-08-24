@@ -815,14 +815,17 @@ const originalFirstDateScenes = [
   {
   background: 'bg4.jpg',
   sprites: [],
-  dialogues: [],
+  dialogues: [
+    { speaker: 'kk', text: "(The first date ended successfully. Moving to the next date...)" }
+  ],
   onEnter: function() {
-    // Remove the congratulations creation code and directly show the alert
-    setTimeout(() => {
-      if (confirm("Move to the next date?")) {
-        beginLibraryDate();
-      }
-    }, 500);
+    // Clear any existing timeouts
+    clearTimeout(this.transitionTimeout);
+    
+    // Set timeout to transition after dialogue is shown
+    this.transitionTimeout = setTimeout(() => {
+      beginLibraryDate();
+    }, 2500);
   }
 }
 ];
