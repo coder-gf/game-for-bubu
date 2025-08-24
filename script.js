@@ -811,23 +811,7 @@ const originalFirstDateScenes = [
       // Fade out sprite
       spriteContainer.innerHTML = '';
     }
-  },
-  {
-  background: 'bg4.jpg',
-  sprites: [],
-  dialogues: [
-    { speaker: 'kk', text: "(The first date ended successfully. Moving to the next date...)" }
-  ],
-  onEnter: function() {
-    // Clear any existing timeouts
-    clearTimeout(this.transitionTimeout);
-    
-    // Set timeout to transition after dialogue is shown
-    this.transitionTimeout = setTimeout(() => {
-      beginLibraryDate();
-    }, 2500);
   }
-}
 ];
 
 // Library Date Scenes
@@ -840,10 +824,6 @@ const libraryDateScenes = [
       { speaker: 'kk', text: "(She's planned this date at this beautiful library. I should find her.)" }
     ],
     onEnter: function() {
-      // Hide congratulations message if it exists
-      const congrats = document.getElementById('congratulations');
-      if (congrats) congrats.style.display = 'none';
-      
       // Show dialogue container
       document.getElementById('dialogue-container').style.display = 'block';
       
@@ -1339,13 +1319,14 @@ let currentDialogueIndex = 0;
 let isDateTyping = false;
 let dateTypingTimer = null;
 let currentChoices = null;
+let currentDateType = 'first'; // Track which date type we're in
 
 function showSprite(spriteInfo) {
   spriteContainer.innerHTML = ''; // Clear previous sprites
   
   if (spriteInfo.image) {
     const sprite = document.createElement('img');
-    sprite.src = spriteInfo.image;
+  sprite.src = spriteInfo.image;
     sprite.className = 'character-sprite';
     
     // Position the sprite
@@ -1428,18 +1409,11 @@ function loadDateScene(sceneIndex) {
   }
   
   // Change music if we're entering the candy shop (scene index 5)
-  if (sceneIndex === 5) {
+  if (sceneIndex === 5 && currentDateType === 'first') {
     dateMusic.pause();
     candyMusic.currentTime = 0;
     tryPlay(candyMusic);
   }
-
-// ✅ Change back when entering the park (scene index 20)
-else if (sceneIndex === 20) {
-  candyMusic.pause();
-  dateMusic.currentTime = 0;
-  tryPlay(dateMusic);
-}
   
   // Show sprites
   if (scene.sprites && scene.sprites.length > 0) {
@@ -1533,8 +1507,12 @@ function onNextButtonClick() {
     if (currentDateSceneIndex < currentFirstDateScenes.length) {
       loadDateScene(currentDateSceneIndex);
     } else {
-      // All first date scenes completed
-     // alert("All scenes completed!");
+      // All scenes completed - check which date type we're in
+      if (currentDateType === 'first') {
+        // Transition to library date
+        beginLibraryDate();
+      }
+      // For library date, we don't do anything special when it ends
     }
   }
 }
@@ -1546,6 +1524,7 @@ function beginFirstDate() {
   
   // Reset the scenes to their original state
   currentFirstDateScenes = JSON.parse(JSON.stringify(originalFirstDateScenes));
+  currentDateType = 'first';
   
   // Hide epilogue, show first date stage
   epilogueStage.classList.remove('visible');
@@ -1566,6 +1545,9 @@ function beginFirstDate() {
 
 /* ---------- Library Date Logic ---------- */
 function beginLibraryDate() {
+  // Set the current date type to library
+  currentDateType = 'library';
+  
   // Reset the scenes to the library date scenes
   currentFirstDateScenes = JSON.parse(JSON.stringify(libraryDateScenes));
   
