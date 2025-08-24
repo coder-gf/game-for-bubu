@@ -3,6 +3,7 @@ const startMusic = document.getElementById('start-music');
 const epilogueMusic = document.getElementById('epilogue-music');
 const dateMusic = document.getElementById('date-music');
 const candyMusic = document.getElementById('candy-music');
+const libraryMusic = document.getElementById('library-music');
 
 /* Best effort: try to autoplay; if the browser blocks it, begin on first user gesture */
 function tryPlay(audio){
@@ -822,6 +823,514 @@ const originalFirstDateScenes = [
       congrats.id = 'congratulations';
       congrats.textContent = "Congratulations! You have received a bag of candies! 🍬";
       firstDateStage.appendChild(congrats);
+      
+      // After a delay, show the alert to move to the next date
+      setTimeout(() => {
+        if (confirm("Move to the next date?")) {
+          beginLibraryDate();
+        }
+      }, 2000);
+    }
+  }
+];
+
+// Library Date Scenes
+const libraryDateScenes = [
+  {
+    background: 'bg5.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(We're meeting for our second date today.)" },
+      { speaker: 'kk', text: "(She's planned this date at this beautiful library. I should find her.)" }
+    ],
+    onEnter: function() {
+      // Hide congratulations message if it exists
+      const congrats = document.getElementById('congratulations');
+      if (congrats) congrats.style.display = 'none';
+      
+      // Show dialogue container
+      document.getElementById('dialogue-container').style.display = 'block';
+      
+      // Change music to library.mp3
+      dateMusic.pause();
+      candyMusic.pause();
+      libraryMusic.currentTime = 0;
+      tryPlay(libraryMusic);
+    }
+  },
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p12.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kk', text: "(There she is, waving at me. She looks.. Different.)" },
+      { speaker: 'kc', text: "Hiiii Kinshuk. I've been waiting for you." },
+      { speaker: 'kk', text: "Heyy, sorry, it took me a while to find you in here, this place is huge." },
+      { speaker: 'kc', text: "Awwwww I know. Don't worry about it." }
+    ]
+  },
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p13.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "By the way.. Notice something different?" },
+      { speaker: 'kk', text: "Are those powered specs? They look great on you." },
+      { speaker: 'kc', text: "Hehe, yes. I wore them today because it seemed fitting." },
+      { speaker: 'kk', text: "(Wearing glasses for the library date… stereotypical.)" },
+      { speaker: 'kc', text: "How do I look?" }
+    ],
+    choices: [
+      { 
+        text: "Dressed for the occasion, definitely.", 
+        result: {
+          sprite: 'p20.png',
+          dialogues: [
+            { speaker: 'kc', text: "Hmmm.. That's right." }
+          ]
+        }
+      },
+      { 
+        text: "You look really cute in those glasses.", 
+        result: {
+          sprite: 'p21.png',
+          dialogues: [
+            { speaker: 'kc', text: "You look really dashing yourself, Kinshuk." }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p13.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "You know, I've also been paying attention to your likes and dislikes." },
+      { speaker: 'kk', text: "You have?" },
+      { speaker: 'kc', text: "Yes! I know you're a sucker for geography." },
+      { speaker: 'kc', text: "Remember the time you were showing off your Geoguessr ranking to me?" }
+    ]
+  },
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p22.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "It was Gold 1, wasn't it?" },
+      { speaker: 'kk', text: "Wow, you remember huh?" },
+      { speaker: 'kc', text: "Of course I do." },
+      { speaker: 'kc', text: "Since you love geography so much, let's see how sharp you really are. Ready for a quick atlas challenge?" },
+      { speaker: 'kk', text: "Wait, what?" }
+    ]
+  },
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p11.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kk', text: "(She pulls out a huge Atlas from the bookshelf behind her.)" },
+      { speaker: 'kk', text: "Haha, bring it on. I'm ever ready." },
+      { speaker: 'kc', text: "Damn. I thought I'd catch you off guard, but you're really confident." },
+      { speaker: 'kc', text: "Okay, let's see here.." },
+      { speaker: 'kk', text: "(She shuffles through the pages.)" }
+    ]
+  },
+  // Question 1
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p11.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Right, so tell me this. Which country borders the most other countries in the world?" }
+    ],
+    choices: [
+      { 
+        text: "China", 
+        result: {
+          sprite: 'p21.png',
+          dialogues: [
+            { speaker: 'kc', text: "Wow.. I didn't expect you to actually know this.." },
+            { speaker: 'kk', text: "(She's all starry eyed, it's so easy to amuse her.)" }
+          ]
+        }
+      },
+      { 
+        text: "Brazil", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "Haha, seems that even Gold 1 can fumble sometimes." },
+            { speaker: 'kk', text: "(Oh god.. This was embarrassing.)" }
+          ]
+        }
+      },
+      { 
+        text: "Russia", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "Haha, seems that even Gold 1 can fumble sometimes." },
+            { speaker: 'kk', text: "(Oh god.. This was embarrassing.)" }
+          ]
+        }
+      },
+      { 
+        text: "Democratic Republic of the Congo", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "Haha, seems that even Gold 1 can fumble sometimes." },
+            { speaker: 'kk', text: "(Oh god.. This was embarrassing.)" }
+          ]
+        }
+      }
+    ]
+  },
+  // Question 2
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p11.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Okay now, Kazakhstan moved its capital city in 1997. What's the current capital?" }
+    ],
+    choices: [
+      { 
+        text: "Astana (Nur-Sultan)", 
+        result: {
+          sprite: 'p22.png',
+          dialogues: [
+            { speaker: 'kc', text: "That's right! Kinshuk, how did you know this?" },
+            { speaker: 'kk', text: "Haha, I know a lot of things. You'll get used to it slowly." }
+          ]
+        }
+      },
+      { 
+        text: "Almaty", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "That's wrong.. You'll have to spend more time studying, haha." },
+            { speaker: 'kk', text: "(Shoot.. How did I get this wrong?)" }
+          ]
+        }
+      },
+      { 
+        text: "Bishkek", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "That's wrong.. You'll have to spend more time studying, haha." },
+            { speaker: 'kk', text: "(Shoot.. How did I get this wrong?)" }
+          ]
+        }
+      },
+      { 
+        text: "Tashkent", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "That's wrong.. You'll have to spend more time studying, haha." },
+            { speaker: 'kk', text: "(Shoot.. How did I get this wrong?)" }
+          ]
+        }
+      }
+    ]
+  },
+  // Question 3
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p13.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Shall I continue?" },
+      { speaker: 'kk', text: "Yeah yeah, ask away." },
+      { speaker: 'kc', text: "Okay, so for your next question, can you tell me the country with the most islands in the world, according to the atlas?" }
+    ],
+    choices: [
+      { 
+        text: "Canada", 
+        result: {
+          sprite: 'p13.png',
+          dialogues: [
+            { speaker: 'kc', text: "Nuh-uh. I expected more from you, you know." },
+            { speaker: 'kk', text: "(Noooooo.. I should've known this one.)" }
+          ]
+        }
+      },
+      { 
+        text: "Indonesia", 
+        result: {
+          sprite: 'p13.png',
+          dialogues: [
+            { speaker: 'kc', text: "Nuh-uh. I expected more from you, you know." },
+            { speaker: 'kk', text: "(Noooooo.. I should've known this one.)" }
+          ]
+        }
+      },
+      { 
+        text: "Sweden", 
+        result: {
+          sprite: 'p22.png',
+          dialogues: [
+            { speaker: 'kc', text: "That's right! Wow.. I'm seriously impressed, Kinshuk." },
+            { speaker: 'kk', text: "Awwwww. Also, did you know Sweden has around 260,000 islands?" },
+            { speaker: 'kc', text: "That many? How's that even possible!?" },
+            { speaker: 'kk', text: "Stick with me, babe." },
+            { speaker: 'kc', text: "Haha, come on, you're so silly." }
+          ]
+        }
+      },
+      { 
+        text: "Philippines", 
+        result: {
+          sprite: 'p13.png',
+          dialogues: [
+            { speaker: 'kc', text: "Nuh-uh. I expected more from you, you know." },
+            { speaker: 'kk', text: "(Noooooo.. I should've known this one.)" }
+          ]
+        }
+      }
+    ]
+  },
+  // Question 4
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p11.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Okay, now answer this one. This river flows through more countries than any other. Which one is it?" }
+    ],
+    choices: [
+      { 
+        text: "Nile", 
+        result: {
+          sprite: 'p20.png',
+          dialogues: [
+            { speaker: 'kc', text: "Umm, no. Tell me, is this atlas too tricky for Gold 1 rankers?" },
+            { speaker: 'kk', text: "(She's mocking me now. I need to think harder!)" }
+          ]
+        }
+      },
+      { 
+        text: "Danube", 
+        result: {
+          sprite: 'p22.png',
+          dialogues: [
+            { speaker: 'kc', text: "OMG, it's correct! You know your stuff, Mr Gold 1." },
+            { speaker: 'kk', text: "Hey, stop teasing me about my Geoguessr hobby!" }
+          ]
+        }
+      },
+      { 
+        text: "Mekong", 
+        result: {
+          sprite: 'p20.png',
+          dialogues: [
+            { speaker: 'kc', text: "Umm, no. Tell me, is this atlas too tricky for Gold 1 rankers?" },
+            { speaker: 'kk', text: "(She's mocking me now. I need to think harder!)" }
+          ]
+        }
+      },
+      { 
+        text: "Amazon", 
+        result: {
+          sprite: 'p20.png',
+          dialogues: [
+            { speaker: 'kc', text: "Umm, no. Tell me, is this atlas too tricky for Gold 1 rankers?" },
+            { speaker: 'kk', text: "(She's mocking me now. I need to think harder!)" }
+          ]
+        }
+      }
+    ]
+  },
+  // Question 5
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p11.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Now, one last question for today. The lowest point on land is found on the shores of which body of water?" }
+    ],
+    choices: [
+      { 
+        text: "Caspian Sea", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "Oops, that's not right. How come you don't know this?" },
+            { speaker: 'kk', text: "Hey! Cut me some slack!" },
+            { speaker: 'kc', text: "Haha, it's fine, I'm just kidding! I don't know the answers to any of these myself." },
+            { speaker: 'kk', text: "(Grrrrrrr..)" }
+          ]
+        }
+      },
+      { 
+        text: "Dead Sea", 
+        result: {
+          sprite: 'p21.png',
+          dialogues: [
+            { speaker: 'kc', text: "I'm speechless." },
+            { speaker: 'kk', text: "Whaaat, is it really that impressive to you?" },
+            { speaker: 'kc', text: "…" },
+            { speaker: 'kk', text: "(She's just staring at me without saying anything. It's making me blush a little.)" }
+          ]
+        }
+      },
+      { 
+        text: "Lake Baikal", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "Oops, that's not right. How come you don't know this?" },
+            { speaker: 'kk', text: "Hey! Cut me some slack!" },
+            { speaker: 'kc', text: "Haha, it's fine, I'm just kidding! I don't know the answers to any of these myself." },
+            { speaker: 'kk', text: "(Grrrrrrr..)" }
+          ]
+        }
+      },
+      { 
+        text: "Great Salt Lake", 
+        result: {
+          sprite: 'p11.png',
+          dialogues: [
+            { speaker: 'kc', text: "Oops, that's not right. How come you don't know this?" },
+            { speaker: 'kk', text: "Hey! Cut me some slack!" },
+            { speaker: 'kc', text: "Haha, it's fine, I'm just kidding! I don't know the answers to any of these myself." },
+            { speaker: 'kk', text: "(Grrrrrrr..)" }
+          ]
+        }
+      }
+    ]
+  },
+  // After quiz
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p22.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "That was really fun! Sorry for putting you on the spot, though." },
+      { speaker: 'kk', text: "It's fine, and I'm glad to know you've noticed my interests." },
+      { speaker: 'kc', text: "Yeah. But honestly, I feel like any activity would be fun with you." },
+      { speaker: 'kk', text: "I feel the same." },
+      { speaker: 'kk', text: "(There's a silent moment between us, where we just smile and look at each other.)" },
+      { speaker: 'kk', text: "(This feels right.)" }
+    ]
+  },
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p23.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Actually.. I have something to give you today as well." },
+      { speaker: 'kk', text: "Nooooo.. You brought something for me again?" },
+      { speaker: 'kc', text: "Yeah, I saw this somewhere and I felt that you would like it." },
+      { speaker: 'kk', text: "(She hands me a gift-wrapped item.)" },
+      { speaker: 'kc', text: "I'm not sure if you'd actually like it or not, so don't open it right now okay?" },
+      { speaker: 'kk', text: "Awwwww, sure Kriti, and thank you so much. You're very thoughtful." },
+      { speaker: 'kc', text: "Lately, you've been occupying my thoughts." }
+    ],
+    choices: [
+      { 
+        text: "Are you flirting with me?", 
+        result: {
+          sprite: 'p20.png',
+          dialogues: [
+            { speaker: 'kc', text: "Should I not?" },
+            { speaker: 'kk', text: "No, I didn't say that.." },
+            { speaker: 'kk', text: "(She gets serious pretty quickly.)" }
+          ]
+        }
+      },
+      { 
+        text: "I've been thinking about you too.", 
+        result: {
+          sprite: 'p22.png',
+          dialogues: [
+            { speaker: 'kc', text: "Oh stop itttt. I know you only think about what YouTube video to watch next." },
+            { speaker: 'kk', text: "Hey! Why do you tease me so much!?" },
+            { speaker: 'kc', text: "It's just fun." },
+            { speaker: 'kk', text: "(She's in a playful mood.)" }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    background: 'bg5.jpg',
+    sprites: [
+      {
+        image: 'p12.png',
+        position: 'center'
+      }
+    ],
+    dialogues: [
+      { speaker: 'kc', text: "Anyways, it's time to go now, Kinshuk." },
+      { speaker: 'kk', text: "Awwwww.. Already?" },
+      { speaker: 'kc', text: "I'll see you again very soon! Let's meet again this weekend." },
+      { speaker: 'kk', text: "Deal." },
+      { speaker: 'kc', text: "Great, take care!" }
+    ]
+  },
+  {
+    background: 'bg5.jpg',
+    sprites: [],
+    dialogues: [
+      { speaker: 'kk', text: "(She hugs me and takes her leave." },
+      { speaker: 'kk', text: "I watch as she finds her way to the exit, and just smile to myself.)" }
+    ],
+    onEnter: function() {
+      // Fade out sprite
+      spriteContainer.innerHTML = '';
     }
   }
 ];
@@ -1059,6 +1568,16 @@ function beginFirstDate() {
   nextButton.addEventListener('click', onNextButtonClick);
 }
 
+/* ---------- Library Date Logic ---------- */
+function beginLibraryDate() {
+  // Reset the scenes to the library date scenes
+  currentFirstDateScenes = JSON.parse(JSON.stringify(libraryDateScenes));
+  
+  // Start from the first scene
+  currentDateSceneIndex = 0;
+  loadDateScene(currentDateSceneIndex);
+}
+
 /* ---------- Boot ---------- */
 window.addEventListener('load', () => {
   // Try to start start-screen music
@@ -1074,9 +1593,10 @@ window.addEventListener('load', () => {
   // Preload the date music and candy music
   dateMusic.load();
   candyMusic.load();
+  libraryMusic.load();
   
   // Preload character sprites and dialogue boxes
-  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'p7.png', 'p8.png', 'p9.png', 'p10.png', 'd1.png', 'd2.png'];
+  const spritesToPreload = ['p1.png', 'p2.png', 'p3.png', 'p4.png', 'p5.png', 'p6.png', 'p7.png', 'p8.png', 'p9.png', 'p10.png', 'p11.png', 'p12.png', 'p13.png', 'p20.png', 'p21.png', 'p22.png', 'p23.png', 'd1.png', 'd2.png'];
   spritesToPreload.forEach(sprite => {
     new Image().src = sprite;
   });
