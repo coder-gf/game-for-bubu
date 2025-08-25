@@ -8,6 +8,17 @@ const roadMusic = document.getElementById('road-music');
 const mallMusic = document.getElementById('mall-music');
 const roomMusic = document.getElementById('room-music');
 
+function stopAllMusic() {
+    startMusic.pause();
+    epilogueMusic.pause();
+    dateMusic.pause();
+    candyMusic.pause();
+    libraryMusic.pause();
+    roadMusic.pause();
+    mallMusic.pause();
+    roomMusic.pause();
+}
+
 /* Best effort: try to autoplay; if the browser blocks it, begin on first user gesture */
 function tryPlay(audio){
   if (!audio) return;
