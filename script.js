@@ -1857,23 +1857,6 @@ else if (sceneIndex === 20) {
   tryPlay(dateMusic);
 }
 
-  // Third date music changes
-else if (sceneIndex === 38) { // Hotel scene
-    stopAllMusic();
-    roomMusic.currentTime = 0;
-    tryPlay(roomMusic);
-}
-else if (sceneIndex === 31) { // Mall scene
-    stopAllMusic();
-    mallMusic.currentTime = 0;
-    tryPlay(mallMusic);
-}
-else if (sceneIndex === 25) { // Road scene
-    stopAllMusic();
-    roadMusic.currentTime = 0;
-    tryPlay(roadMusic);
-}
-
   // Show sprites
   if (scene.sprites && scene.sprites.length > 0) {
     showSprite(scene.sprites[0]);
