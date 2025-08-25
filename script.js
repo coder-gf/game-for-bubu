@@ -1329,7 +1329,7 @@ const libraryDateScenes = [
     dialogues: [],
     onEnter: function() {
       // Change music to road.mp3
-      libraryMusic.pause();
+      stopAllMusic();
       roadMusic.currentTime = 0;
       tryPlay(roadMusic);
       // Hide dialogue box for this transition
@@ -1404,7 +1404,7 @@ const libraryDateScenes = [
     ],
     onEnter: function() {
       // Change music to mall.mp3
-      roadMusic.pause();
+      stopAllMusic();
       mallMusic.currentTime = 0;
       tryPlay(mallMusic);
     }
@@ -1496,7 +1496,7 @@ const libraryDateScenes = [
     ],
     onEnter: function() {
       // Change music to room.mp3
-      mallMusic.pause();
+      stopAllMusic();
       roomMusic.currentTime = 0;
       tryPlay(roomMusic);
     }
