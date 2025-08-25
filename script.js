@@ -8,6 +8,17 @@ const roadMusic = document.getElementById('road-music');
 const mallMusic = document.getElementById('mall-music');
 const roomMusic = document.getElementById('room-music');
 
+function stopAllMusic() {
+    startMusic.pause();
+    epilogueMusic.pause();
+    dateMusic.pause();
+    candyMusic.pause();
+    libraryMusic.pause();
+    roadMusic.pause();
+    mallMusic.pause();
+    roomMusic.pause();
+}
+
 /* Best effort: try to autoplay; if the browser blocks it, begin on first user gesture */
 function tryPlay(audio){
   if (!audio) return;
@@ -1844,6 +1855,23 @@ else if (sceneIndex === 20) {
   candyMusic.pause();
   dateMusic.currentTime = 0;
   tryPlay(dateMusic);
+}
+
+  // Third date music changes
+else if (sceneIndex === 38) { // Hotel scene
+    stopAllMusic();
+    roomMusic.currentTime = 0;
+    tryPlay(roomMusic);
+}
+else if (sceneIndex === 31) { // Mall scene
+    stopAllMusic();
+    mallMusic.currentTime = 0;
+    tryPlay(mallMusic);
+}
+else if (sceneIndex === 25) { // Road scene
+    stopAllMusic();
+    roadMusic.currentTime = 0;
+    tryPlay(roadMusic);
 }
 
   // Show sprites
